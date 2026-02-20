@@ -1,0 +1,1600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AJHD Science Study Companion - Volume 3 (Final)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #8e44ad 0%, #3498db 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #8e44ad, #3498db);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            display: flex;
+            min-height: 600px;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: #f8f9fa;
+            padding: 20px;
+            border-right: 2px solid #e9ecef;
+            overflow-y: auto;
+        }
+
+        .sidebar h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #8e44ad;
+        }
+
+        .section-menu {
+            list-style: none;
+        }
+
+        .section-item {
+            padding: 12px 15px;
+            margin: 5px 0;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid #dee2e6;
+            font-weight: 500;
+        }
+
+        .section-item:hover {
+            background: #8e44ad;
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .section-item.active {
+            background: #8e44ad;
+            color: white;
+            border-color: #6c3483;
+        }
+
+        .question-area {
+            flex: 1;
+            padding: 30px;
+            background: white;
+            position: relative;
+        }
+
+        .progress-indicator {
+            background: #e9ecef;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .question-counter {
+            font-size: 1.1em;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+
+        .score-badge {
+            background: #2c3e50;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 25px;
+            font-weight: bold;
+        }
+
+        .question-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-left: 5px solid #8e44ad;
+        }
+
+        .question-text {
+            font-size: 1.2em;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-gap: 12px;
+            margin: 20px 0;
+        }
+
+        .option-btn {
+            padding: 15px 20px;
+            background: white;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: left;
+            font-size: 1em;
+            width: 100%;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background: #f5eef8;
+            border-color: #8e44ad;
+        }
+
+        .option-btn.correct {
+            background: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+        }
+
+        .option-btn.incorrect {
+            background: #f8d7da;
+            border-color: #dc3545;
+            color: #721c24;
+        }
+
+        .feedback {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background: #fff3cd;
+            border: 1px solid #ffeeba;
+            color: #856404;
+            display: none;
+        }
+
+        .feedback.show {
+            display: block;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #e9ecef;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #8e44ad;
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: #6c3483;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .reset-btn {
+            background: #dc3545;
+            color: white;
+            margin-left: 10px;
+        }
+
+        .reset-btn:hover {
+            background: #c82333;
+        }
+
+        .topic-header {
+            background: #2c3e50;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .true-false-container {
+            display: flex;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .tf-btn {
+            flex: 1;
+            padding: 15px;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .mastery-meter {
+            background: linear-gradient(135deg, #8e44ad, #3498db);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .mastery-progress {
+            width: 100%;
+            height: 20px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 10px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+
+        .mastery-fill {
+            height: 100%;
+            background: #f1c40f;
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        .challenge-badge {
+            display: inline-block;
+            background: #f39c12;
+            color: #2c3e50;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin: 5px;
+        }
+
+        footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 2px solid #e9ecef;
+            }
+            
+            .question-area {
+                padding: 20px;
+            }
+            
+            .true-false-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📚 AJHD Science Study Companion - Volume 3 (Final Edition)</h1>
+            <p>Based on "Animals: A Visual Encyclopedia" by DK Smithsonian</p>
+            <p>📖 Comprehensive Review | Challenge Questions | Mastery Tracking</p>
+        </header>
+
+        <div class="main-content">
+            <div class="sidebar">
+                <h3>📋 Study Sections</h3>
+                <ul class="section-menu" id="sectionMenu">
+                    <!-- Sections will be populated by JavaScript -->
+                </ul>
+                <div style="margin-top: 20px; padding: 15px; background: #e9ecef; border-radius: 8px;">
+                    <p style="color: #2c3e50; font-size: 0.9em;">
+                        <strong>📊 Statistics:</strong><br>
+                        Total Questions: <span id="totalQuestions">0</span><br>
+                        Completed: <span id="completedCount">0</span>
+                    </p>
+                </div>
+                <div class="mastery-meter" id="masteryMeter">
+                    <strong>🏆 Mastery Level</strong>
+                    <div class="mastery-progress">
+                        <div class="mastery-fill" id="masteryFill" style="width: 0%"></div>
+                    </div>
+                    <span id="masteryText">Beginner Naturalist</span>
+                </div>
+                <div style="margin-top: 15px; text-align: center;">
+                    <span class="challenge-badge">🔬 50+ New Questions</span>
+                    <span class="challenge-badge">⭐ Final Review</span>
+                </div>
+            </div>
+
+            <div class="question-area">
+                <div class="progress-indicator">
+                    <span class="question-counter" id="questionCounter">Question 1 of 10</span>
+                    <span class="score-badge" id="scoreDisplay">Score: 0/0</span>
+                </div>
+
+                <div id="questionContainer">
+                    <!-- Questions will be displayed here -->
+                </div>
+
+                <div class="nav-buttons">
+                    <button class="btn btn-secondary" id="prevBtn" onclick="previousQuestion()">← Previous</button>
+                    <div>
+                        <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()">Next →</button>
+                        <button class="btn reset-btn" id="resetBtn" onclick="resetSection()">Reset Section</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>© 2026 Academic Junior High Decathlon Study Guide | Volume 3 - Complete Edition | Covers All Remaining Material</p>
+        </footer>
+    </div>
+
+    <script>
+        // Question database structure - Volume 3 (Final Edition)
+        // This volume covers remaining material from all sections with detailed species information
+        const questionBank = {
+            section1: {
+                title: "Birds - Detailed Species Review",
+                questions: [
+                    {
+                        type: "multiple-choice",
+                        question: "Which bird of prey is known for stomping on its prey with its talons?",
+                        options: [
+                            "Golden eagle",
+                            "Secretary bird",
+                            "Peregrine falcon",
+                            "Osprey"
+                        ],
+                        correct: 1,
+                        explanation: "The secretary bird stomps on its prey with its talons. (Page 119)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "The bald eagle can lift half its body weight but can also:",
+                        options: [
+                            "Dive 200 mph",
+                            "Swim to shore with its wings if the fish is larger",
+                            "Carry prey twice its size",
+                            "Hunt cooperatively in groups"
+                        ],
+                        correct: 1,
+                        explanation: "Bald eagles can swim to shore with their wings if the fish is larger than they can lift. (Page 120-121)"
+                    },
+                    {
+                        type: "true-false",
+                        question: "Pel's fishing owl feeds only on fish and lives in nests high in trees.",
+                        correct: false,
+                        explanation: "False. Pel's fishing owl feeds on fish, frogs, and other freshwater animals, and lives in holes of trees. (Page 123)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "The snowy owl has long, thick feathers that extend over its bill and toes to:",
+                        options: [
+                            "Help it swim",
+                            "Keep it insulated in cold climates",
+                            "Camouflage in snow",
+                            "Attract mates"
+                        ],
+                        correct: 1,
+                        explanation: "The snowy owl's feathers keep it well insulated in colder climates. (Page 123)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "Which game bird is known for its spectacular plumage used to attract mates?",
+                        options: [
+                            "Wild turkey",
+                            "Peacock (common peafowl)",
+                            "Ring-necked pheasant",
+                            "Ruffed grouse"
+                        ],
+                        correct: 1,
+                        explanation: "The peacock (male peafowl) is famous for its spectacular plumage used in courtship displays. (Page 125)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "The wandering albatross builds nests from:",
+                        options: [
+                            "Sticks and leaves only",
+                            "Mud, grass, and moss",
+                            "Seaweed and shells",
+                            "Feathers and down"
+                        ],
+                        correct: 1,
+                        explanation: "Wandering albatrosses build nests from mud, grass, and moss. (Page 130)"
+                    },
+                    {
+                        type: "true-false",
+                        question: "Pelicans and their relatives are the only birds with webbing between all four toes.",
+                        correct: true,
+                        explanation: "True. This is a unique feature of pelicans and their relatives. (Page 132)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "The great frigate bird's scarlet throat pouch is used for:",
+                        options: [
+                            "Storing food",
+                            "Courtship display",
+                            "Warning predators",
+                            "Cooling down"
+                        ],
+                        correct: 1,
+                        explanation: "The great frigate bird inflates its scarlet throat pouch in courtship displays. (Page 133)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "Which duck has sawteeth along its bill to grip slippery fish?",
+                        options: [
+                            "Mallard",
+                            "Muscovy duck",
+                            "Goosander",
+                            "Mandarin duck"
+                        ],
+                        correct: 2,
+                        explanation: "The goosander has sawteeth along its bill for gripping fish. (Page 134-135)"
+                    },
+                    {
+                        type: "true-false",
+                        question: "The wattled jacana can walk on top of floating water plants due to its widely spread feet.",
+                        correct: true,
+                        explanation: "True. The wattled jacana's widely spread feet allow it to distribute its weight and walk on floating vegetation. (Page 135)"
+                    }
+                ]
+            },
+            section2: {
+                title: "Birds - Advanced & Migration",
+                questions: [
+                    {
+                        type: "multiple-choice",
+                        question: "Snow geese swallow small amounts of sand to:",
+                        options: [
+                            "Help digest plants",
+                            "Add weight for diving",
+                            "Store minerals",
+                            "Clean their gizzard"
+                        ],
+                        correct: 0,
+                        explanation: "Snow geese swallow small amounts of sand to help them digest plants. (Page 137)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "The great Indian hornbill's casque may be used for:",
+                        options: [
+                            "Storing water",
+                            "Attracting a mate or fighting",
+                            "Amplifying calls",
+                            "Cooling the brain"
+                        ],
+                        correct: 1,
+                        explanation: "The casque may be used to attract a mate or in fighting. (Page 139)"
+                    },
+                    {
+                        type: "true-false",
+                        question: "The green wood hoopoe uses its slender, down-curved bill to probe into trees for insects.",
+                        correct: true,
+                        explanation: "True. The green wood hoopoe probes for insects and invertebrates. (Page 139)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "Lesser flamingos build nests of:",
+                        options: [
+                            "Sticks and twigs",
+                            "Flattened cones of mud",
+                            "Grass and seaweed",
+                            "Small stones"
+                        ],
+                        correct: 1,
+                        explanation: "Flamingos make nests of flattened cones of mud. (Page 140)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "A group of flamingo chicks is called a:",
+                        options: [
+                            "Colony",
+                            "Creche",
+                            "Flock",
+                            "Nursery"
+                        ],
+                        correct: 1,
+                        explanation: "Flamingo chicks join creches after hatching. (Page 141)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "The shoebill's bill is strong enough to:",
+                        options: [
+                            "Crack turtle shells",
+                            "Break tree branches",
+                            "Crush bones",
+                            "Dig burrows"
+                        ],
+                        correct: 0,
+                        explanation: "The shoebill's bill can crack turtle shells or snap the head off a small crocodile. (Page 143)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "Parrots are under threat of extinction due to:",
+                        options: [
+                            "Loss of habitat and capture for pet trade",
+                            "Climate change only",
+                            "Lack of food",
+                            "Natural predators"
+                        ],
+                        correct: 0,
+                        explanation: "Parrots face threats from habitat loss, especially in tropical rainforests, and capture by trappers for the pet trade. (Page 144)"
+                    },
+                    {
+                        type: "true-false",
+                        question: "All hummingbirds weigh less than 24 grams.",
+                        correct: true,
+                        explanation: "True. Hummingbirds are extremely lightweight, with most species weighing less than 24 grams. (Page 147)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "Woodpeckers have extra thick skulls to:",
+                        options: [
+                            "Protect from predators",
+                            "Cushion their brain while hammering",
+                            "Store fat",
+                            "Amplify drumming sounds"
+                        ],
+                        correct: 1,
+                        explanation: "Their skulls are extra thick to cushion the brain during hours of hammering. (Page 148)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "The greater honeyguide helps humans by:",
+                        options: [
+                            "Leading them to bees' nests",
+                            "Warning of danger",
+                            "Showing water sources",
+                            "Guiding through forests"
+                        ],
+                        correct: 0,
+                        explanation: "Honeyguides sniff out bees' nests and lead African tribes to them for honey harvesting. (Page 149)"
+                    }
+                ]
+            },
+            section3: {
+                title: "Reptiles - Advanced Species",
+                questions: [
+                    {
+                        type: "multiple-choice",
+                        question: "Nile crocodile mothers care for their young for up to:",
+                        options: [
+                            "3 months",
+                            "6 months",
+                            "1 year",
+                            "2 years"
+                        ],
+                        correct: 3,
+                        explanation: "Nile crocodile mothers care for and protect their young for up to two years. (Page 164-165)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "The emerald tree boa gives birth to young that are:",
+                        options: [
+                            "Green at birth",
+                            "Orange-red and turn green after one year",
+                            "Brown and turn green as adults",
+                            "Born with full adult coloration"
+                        ],
+                        correct: 1,
+                        explanation: "Emerald tree boas give birth to 3-15 orange-red live young that turn green after one year. (Page 170)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "The reticulated python is widely hunted for:",
+                        options: [
+                            "Its meat",
+                            "Its skin with diamond-shaped markings",
+                            "Its venom",
+                            "Traditional medicine"
+                        ],
+                        correct: 1,
+                        explanation: "Reticulated pythons are hunted for their skin, making them rare in the wild. (Page 171)"
+                    },
+                    {
+                        type: "true-false",
+                        question: "The black mamba is the most feared snake in Australia.",
+                        correct: false,
+                        explanation: "False. The taipan is the most feared snake in Australia. The black mamba is from Africa. (Page 173)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "Amphisbaenians are legless lizards that:",
+                        options: [
+                            "Live in trees",
+                            "Live underground like worms",
+                            "Live in water",
+                            "Live in deserts"
+                        ],
+                        correct: 1,
+                        explanation: "Amphisbaenians live underground like worms but have eyes and a mouth. (Page 175)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "Chameleons have toes that are:",
+                        options: [
+                            "Webbed for swimming",
+                            "Fused into groups for gripping branches",
+                            "Separate with sharp claws",
+                            "Padded for climbing smooth surfaces"
+                        ],
+                        correct: 1,
+                        explanation: "Their toes are fused in groups of two and three to form powerful grippers for holding branches. (Page 176)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "The black tegu lays its eggs in:",
+                        options: [
+                            "Sand dunes",
+                            "Termite mounds",
+                            "Tree hollows",
+                            "Underground burrows"
+                        ],
+                        correct: 1,
+                        explanation: "The black tegu lays eggs in termite mounds to protect them from predators. (Page 179)"
+                    },
+                    {
+                        type: "true-false",
+                        question: "The Komodo dragon's saliva contains bacteria that can kill within 24 hours.",
+                        correct: true,
+                        explanation: "True. While they don't have venom, the bacteria in their saliva can be fatal. (Page 180)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "The thorny devil can defend itself by:",
+                        options: [
+                            "Spraying venom",
+                            "Inflating its body with air",
+                            "Changing color",
+                            "Running on water"
+                        ],
+                        correct: 1,
+                        explanation: "Thorny devils have spines and can also inflate their size with air as a defense. (Page 181)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "The gharial is unique among crocodilians because it:",
+                        options: [
+                            "Lives in salt water",
+                            "Cannot walk on land",
+                            "Eats only plants",
+                            "Builds nests in trees"
+                        ],
+                        correct: 1,
+                        explanation: "The gharial cannot walk on land and rarely leaves the water. (Page 182)"
+                    }
+                ]
+            },
+            section4: {
+                title: "Amphibians - Life Cycles & Adaptations",
+                questions: [
+                    {
+                        type: "multiple-choice",
+                        question: "The great crested newt loses its gills and can leave the water at about:",
+                        options: [
+                            "2 months old",
+                            "4 months old",
+                            "6 months old",
+                            "1 year old"
+                        ],
+                        correct: 1,
+                        explanation: "At about four months old, its gills disappear and it breathes through lungs. (Page 188)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "The Chinese giant salamander's breeding behavior includes:",
+                        options: [
+                            "The female guarding the eggs",
+                            "One male controlling every breeding pair in his territory",
+                            "Both parents caring for young",
+                            "No parental care"
+                        ],
+                        correct: 1,
+                        explanation: "One male controls every breeding pair during mating season and guards all eggs until hatching. (Page 189)"
+                    },
+                    {
+                        type: "true-false",
+                        question: "The Pacific giant salamander can either remain in water as an adult or leave water and lose its gills.",
+                        correct: true,
+                        explanation: "True. This species has flexible life strategies. (Page 189)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "Frogs can leap up to how many times their body length?",
+                        options: [
+                            "5 times",
+                            "10 times",
+                            "15 times",
+                            "20 times"
+                        ],
+                        correct: 1,
+                        explanation: "Frogs can leap 10 times their body length to escape danger. (Page 190)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "The Cope's gray tree frog produces antifreeze to:",
+                        options: [
+                            "Swim in cold water",
+                            "Prevent freezing solid during hibernation",
+                            "Protect its eggs",
+                            "Hunt in winter"
+                        ],
+                        correct: 1,
+                        explanation: "In very cold winters, it produces antifreeze that prevents it from freezing solid. (Page 191)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "Out of 2,000 frog eggs, how many typically return to breed as adults?",
+                        options: [
+                            "50-100",
+                            "20-30",
+                            "10-15",
+                            "Fewer than 5"
+                        ],
+                        correct: 3,
+                        explanation: "Fewer than 5 adults will make it back to the water to breed. (Page 192)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "The midwife toad carries its eggs:",
+                        options: [
+                            "In its mouth",
+                            "Wrapped around its legs",
+                            "On its back",
+                            "In a pouch"
+                        ],
+                        correct: 1,
+                        explanation: "The male wraps the egg strings around his legs and carries them until they're ready to hatch. (Page 193)"
+                    },
+                    {
+                        type: "true-false",
+                        question: "The marine toad lays 30,000 eggs at a time and they hatch in only 3 days.",
+                        correct: true,
+                        explanation: "True. This high reproductive rate helps make them successful. (Page 194-195)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "The golden poison dart frog is unique because it:",
+                        options: [
+                            "Can change color",
+                            "May be the only animal that can kill by touch alone",
+                            "Lives in groups",
+                            "Builds nests"
+                        ],
+                        correct: 1,
+                        explanation: "It contains enough poison to kill 10 humans and may be the only animal that can kill by touch alone. (Page 196)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "The green and black poison dart frog males are:",
+                        options: [
+                            "Shy and reclusive",
+                            "Territorial and will fight other males",
+                            "Cooperative breeders",
+                            "Silent during mating"
+                        ],
+                        correct: 1,
+                        explanation: "Males are territorial and will hold other males belly-to-belly, making loud buzzing sounds. (Page 197)"
+                    }
+                ]
+            },
+            section5: {
+                title: "Fish - Deep Sea & Special Adaptations",
+                questions: [
+                    {
+                        type: "multiple-choice",
+                        question: "The spined pygmy shark has light-emitting organs in its belly that may:",
+                        options: [
+                            "Attract mates",
+                            "Conceal its silhouette from predators",
+                            "Lure prey",
+                            "Communicate with other sharks"
+                        ],
+                        correct: 1,
+                        explanation: "The photophores may conceal its silhouette from predators swimming below. (Page 208)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "The thresher shark hunts by:",
+                        options: [
+                            "Ambush from below",
+                            "Using its tail as a whip to stun prey",
+                            "Cooperative hunting in packs",
+                            "Using electrical senses"
+                        ],
+                        correct: 1,
+                        explanation: "The thresher shark rounds up fish and uses its tail as a whip, stunning or killing prey. (Page 209)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "The Atlantic angel shark hunts by:",
+                        options: [
+                            "Chasing prey at high speed",
+                            "Hiding in sand and bursting out",
+                            "Using bioluminescence",
+                            "Working in groups"
+                        ],
+                        correct: 1,
+                        explanation: "It hides in the sand on the ocean floor and waits to ambush prey. (Page 209)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "Long-nosed skates are declining because:",
+                        options: [
+                            "Overfishing",
+                            "They take 11 years to reach breeding age",
+                            "Pollution",
+                            "Habitat loss"
+                        ],
+                        correct: 1,
+                        explanation: "Their long life cycle means they take 11 years to reach breeding age. (Page 210)"
+                    },
+                    {
+                        type: "true-false",
+                        question: "Manta rays can occasionally give birth to their young while leaping out of the water.",
+                        correct: true,
+                        explanation: "True. Manta rays can leap out of the water and occasionally give birth while doing so. (Page 211)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "The estuarine stonefish has how many venomous spines?",
+                        options: [
+                            "7",
+                            "10",
+                            "13",
+                            "15"
+                        ],
+                        correct: 2,
+                        explanation: "It has 13 venomous spines along its back. (Page 217)"
+                    },
+                    {
+                        type: "true-false",
+                        question: "The giant grouper lives in warm shallow waters around coral reefs.",
+                        correct: true,
+                        explanation: "True. It lives in the Indian Ocean and western and central Pacific Ocean. (Page 218-219)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "The pelican eel can consume food larger than itself because:",
+                        options: [
+                            "It has powerful jaws",
+                            "Its stomach can expand",
+                            "It dissolves prey externally",
+                            "It has multiple stomachs"
+                        ],
+                        correct: 1,
+                        explanation: "Its stomach expands to consume food larger than itself. (Page 221)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "Sockeye salmon can travel up to how many miles to return to spawn?",
+                        options: [
+                            "500 miles",
+                            "750 miles",
+                            "930 miles",
+                            "1000 miles"
+                        ],
+                        correct: 2,
+                        explanation: "They travel up to 930 miles from birth to when they return to spawn. (Page 222)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "Female salmon lay more than how many eggs when spawning?",
+                        options: [
+                            "1,000",
+                            "2,000",
+                            "3,000",
+                            "4,000"
+                        ],
+                        correct: 3,
+                        explanation: "Female salmon lay more than 4,000 eggs. (Page 222)"
+                    }
+                ]
+            },
+            section6: {
+                title: "Invertebrates - Detailed Biology",
+                questions: [
+                    {
+                        type: "multiple-choice",
+                        question: "Glass sponges are home to:",
+                        options: [
+                            "Small fish",
+                            "Pairs of small sponge shrimps",
+                            "Colonies of bacteria",
+                            "Tiny crabs"
+                        ],
+                        correct: 1,
+                        explanation: "Glass sponges are home to pairs of small sponge shrimps. (Page 229)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "The red sponge produces a toxic protein called:",
+                        options: [
+                            "Latrunculin",
+                            "Nematocyst",
+                            "Spiculin",
+                            "Porifera"
+                        ],
+                        correct: 0,
+                        explanation: "The red sponge produces latrunculin to deter predators. (Page 229)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "The elephant ear sponge can flex in stormy seas because:",
+                        options: [
+                            "It has a springy skeleton",
+                            "It lives deep underwater",
+                            "It's made of soft tissue",
+                            "It attaches loosely"
+                        ],
+                        correct: 0,
+                        explanation: "Its springy skeleton enables it to flex so it isn't damaged in stormy seas. (Page 229)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "Giant tube worms living near hydrothermal vents get food from:",
+                        options: [
+                            "Filtering seawater",
+                            "Bacteria that convert chemicals from the vents",
+                            "Hunting small fish",
+                            "Absorbing nutrients through skin"
+                        ],
+                        correct: 1,
+                        explanation: "Bacteria living inside the worm convert chemicals from the vents into usable food. (Page 236)"
+                    },
+                    {
+                        type: "true-false",
+                        question: "The imperial scorpion doesn't have deadly venom and uses pincers to crush prey.",
+                        correct: true,
+                        explanation: "True. It uses powerful, serrated pincers to grab and crush prey. (Page 247)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "The emperor dragonfly nymphs take how long to become winged adults?",
+                        options: [
+                            "6 months",
+                            "1 year",
+                            "2 years",
+                            "3 years"
+                        ],
+                        correct: 1,
+                        explanation: "The nymphs take up to one year to become winged adults and then live for only 10 days. (Page 249)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "Adult mayflies live for only:",
+                        options: [
+                            "A few hours",
+                            "A few days",
+                            "A week",
+                            "Two weeks"
+                        ],
+                        correct: 0,
+                        explanation: "Adult mayflies may live for only a few hours. (Page 249)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "The milkweed grasshopper defends itself by:",
+                        options: [
+                            "Stinging",
+                            "Producing foul-tasting foam",
+                            "Camouflage",
+                            "Loud noises"
+                        ],
+                        correct: 1,
+                        explanation: "It produces a foul-tasting foam if attacked. (Page 253)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "Desert locust swarms can contain how many locusts?",
+                        options: [
+                            "10-20 million",
+                            "40-80 million",
+                            "100-150 million",
+                            "200-300 million"
+                        ],
+                        correct: 1,
+                        explanation: "Swarms can contain 40-80 million locusts. (Page 253)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "Mantids can rotate their head a total of how many degrees?",
+                        options: [
+                            "180 degrees",
+                            "270 degrees",
+                            "300 degrees",
+                            "360 degrees"
+                        ],
+                        correct: 2,
+                        explanation: "Mantids can rotate their head a total of 300 degrees. (Page 254-255)"
+                    }
+                ]
+            },
+            section7: {
+                title: "Invertebrates - Social Insects & Advanced",
+                questions: [
+                    {
+                        type: "multiple-choice",
+                        question: "Giant ants live in colonies of around how many individuals?",
+                        options: [
+                            "50",
+                            "100",
+                            "500",
+                            "1000"
+                        ],
+                        correct: 1,
+                        explanation: "Giant ants live in small colonies of around 100 individuals. (Page 266)"
+                    },
+                    {
+                        type: "true-false",
+                        question: "Giant ants don't have a queen but have a breeding worker called a mother ant.",
+                        correct: true,
+                        explanation: "True. The mother ant will mark rivals with a chemical to be killed. (Page 266)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "Bulldog ants remain perfectly still until:",
+                        options: [
+                            "The sun sets",
+                            "Prey comes into range, then ambush",
+                            "The queen signals",
+                            "Rain starts"
+                        ],
+                        correct: 1,
+                        explanation: "They remain still until prey comes into range, then ambush. (Page 266)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "Fire ants release a chemical to:",
+                        options: [
+                            "Attract prey",
+                            "Alert other fire ants when disturbed",
+                            "Mark territory",
+                            "Find their way home"
+                        ],
+                        correct: 1,
+                        explanation: "They release a chemical to alert other fire ants when disturbed. (Page 267)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "Weaver ants build nests by:",
+                        options: [
+                            "Digging underground tunnels",
+                            "Pulling leaves together and weaving them with silk",
+                            "Using mud and saliva",
+                            "Carving wood"
+                        ],
+                        correct: 1,
+                        explanation: "They pull together leaves and weave them with silk produced by larvae. (Page 267)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "Wood ants 'milk' aphids by:",
+                        options: [
+                            "Chasing them",
+                            "Stroking them until they release honeydew",
+                            "Building shelters for them",
+                            "Carrying them to food"
+                        ],
+                        correct: 1,
+                        explanation: "They stroke aphids until they release a droplet of honeydew. (Page 267)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "Honeypot ant workers that store nectar are called:",
+                        options: [
+                            "Storage ants",
+                            "Repletes",
+                            "Nectar workers",
+                            "Living pots"
+                        ],
+                        correct: 1,
+                        explanation: "Workers called repletes gorge on nectar until their abdomens are stuffed and swollen. (Page 267)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "A termite queen can produce more than how many eggs in a day?",
+                        options: [
+                            "500",
+                            "1000",
+                            "1500",
+                            "2000"
+                        ],
+                        correct: 3,
+                        explanation: "A fully grown queen can produce more than 2,000 eggs in a day. (Page 269)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "The tarantula hawk wasp has a stinger that is:",
+                        options: [
+                            "1/8 inch long",
+                            "1/4 inch long",
+                            "1/2 inch long",
+                            "1 inch long"
+                        ],
+                        correct: 1,
+                        explanation: "It has a 1/4 inch long stinger that gives the most painful sting of any insect. (Page 271)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "The giant ichneumon wasp uses her ovipositor to:",
+                        options: [
+                            "Sting prey",
+                            "Drill through wood to lay eggs",
+                            "Build nests",
+                            "Defend the colony"
+                        ],
+                        correct: 1,
+                        explanation: "She drills through wood to lay eggs on another wasp's grubs. (Page 271)"
+                    },
+                    {
+                        type: "true-false",
+                        question: "The postman butterfly lives for 6 months or more, unlike most butterflies that live only a few weeks.",
+                        correct: true,
+                        explanation: "True. This is likely due to its diet of both nectar and pollen. (Page 275)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "A female scorpion can carry up to how many babies on her back?",
+                        options: [
+                            "50",
+                            "75",
+                            "100",
+                            "125"
+                        ],
+                        correct: 2,
+                        explanation: "A female carries the entire brood, up to 100 babies, on her back. (Page 278)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "The emperor scorpion is threatened due to:",
+                        options: [
+                            "Habitat loss",
+                            "Over-collection",
+                            "Climate change",
+                            "Pollution"
+                        ],
+                        correct: 1,
+                        explanation: "Population numbers are threatened due to over-collection. (Page 279)"
+                    },
+                    {
+                        type: "true-false",
+                        question: "Baby European cave spiders are attracted to light, while adults are photophobic.",
+                        correct: true,
+                        explanation: "True. Adults are photophobic, but babies are attracted to light. (Page 281)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "The tadpole shrimp has how many pairs of legs?",
+                        options: [
+                            "11 pairs on thorax and 6 pairs on rear segments",
+                            "8 pairs total",
+                            "15 pairs total",
+                            "20 pairs total"
+                        ],
+                        correct: 0,
+                        explanation: "It has 11 pairs on the thorax and 6 pairs on each rear segment - the most of any crustacean. (Page 285)"
+                    }
+                ]
+            },
+            section8: {
+                title: "Final Challenge Questions",
+                questions: [
+                    {
+                        type: "multiple-choice",
+                        question: "The common woodlouse is a:",
+                        options: [
+                            "Predator",
+                            "Decomposer that feeds on dead plants and animals",
+                            "Filter feeder",
+                            "Parasite"
+                        ],
+                        correct: 1,
+                        explanation: "It's a decomposer that feeds on dead plants and rotting animals. (Page 285)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "Pacific cleaner shrimp are helpful because they:",
+                        options: [
+                            "Aerate the sand",
+                            "Remove dead tissue and parasites from other fish",
+                            "Clean coral reefs",
+                            "Filter the water"
+                        ],
+                        correct: 1,
+                        explanation: "They remove dead tissue and parasites from other fish, including predators. (Page 285)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "The giant desert centipede can sprint at:",
+                        options: [
+                            "0.5 ft per second",
+                            "1 ft per second",
+                            "1.5 ft per second",
+                            "2 ft per second"
+                        ],
+                        correct: 2,
+                        explanation: "It can sprint 1.5 ft per second. (Page 289)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "The black and yellow flat-backed millipede secretes:",
+                        options: [
+                            "Venom",
+                            "Hydrogen cyanide",
+                            "Sticky silk",
+                            "Foul-smelling oil"
+                        ],
+                        correct: 1,
+                        explanation: "It secretes highly toxic hydrogen cyanide when threatened. (Page 289)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "The Amazonian giant centipede grows to:",
+                        options: [
+                            "5-7 inches",
+                            "8-10 inches",
+                            "10½-13½ inches",
+                            "15-18 inches"
+                        ],
+                        correct: 2,
+                        explanation: "It grows 10½ to 13½ inches long. (Page 289)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "Echinoderms move using:",
+                        options: [
+                            "Muscles only",
+                            "A system of water-filled canals linked to tube feet",
+                            "Jet propulsion",
+                            "Crawling on tentacles"
+                        ],
+                        correct: 1,
+                        explanation: "They pump water into sucker-like tube feet to crawl. (Page 290)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "The crown-of-thorns starfish has damaged many reefs because it:",
+                        options: [
+                            "Releases toxins",
+                            "Eats corals voraciously",
+                            "Blocks sunlight",
+                            "Attracts predators"
+                        ],
+                        correct: 1,
+                        explanation: "Its favorite food is corals and it can eat voraciously. (Page 291)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "The common starfish eats bivalve mollusks by:",
+                        options: [
+                            "Crushing the shell",
+                            "Pushing its stomach out of its body and inside the shell",
+                            "Drilling through the shell",
+                            "Waiting for them to open"
+                        ],
+                        correct: 1,
+                        explanation: "It grabs prey, uses tube feet to prize open the shell, and pushes its stomach inside. (Page 291)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "The violet sea apple feeds by:",
+                        options: [
+                            "Hunting small fish",
+                            "Extending feathery tentacles to trap food particles",
+                            "Filtering water through its body",
+                            "Scavenging on the seafloor"
+                        ],
+                        correct: 1,
+                        explanation: "It extends feathery tentacles to trap bits of food floating in the current. (Page 291)"
+                    },
+                    {
+                        type: "true-false",
+                        question: "The blue starfish can regrow all 5 limbs if torn apart, even into 5 separate starfish.",
+                        correct: true,
+                        explanation: "True. Like most echinoderms, it can regrow lost limbs. (Page 291)"
+                    }
+                ]
+            }
+        };
+
+        // Global state
+        let currentSection = 'section1';
+        let currentQuestionIndex = 0;
+        let userAnswers = {};
+        let score = {};
+
+        // Initialize scores for all sections
+        Object.keys(questionBank).forEach(section => {
+            score[section] = {
+                correct: 0,
+                answered: 0,
+                correctAnswers: {}
+            };
+            userAnswers[section] = {};
+        });
+
+        // Initialize sections menu
+        function initializeSections() {
+            const menu = document.getElementById('sectionMenu');
+            menu.innerHTML = '';
+            
+            Object.keys(questionBank).forEach((sectionId, index) => {
+                const section = questionBank[sectionId];
+                const li = document.createElement('li');
+                li.className = `section-item ${index === 0 ? 'active' : ''}`;
+                li.textContent = section.title;
+                li.onclick = () => switchSection(sectionId);
+                menu.appendChild(li);
+            });
+            
+            updateTotalQuestions();
+            updateMastery();
+        }
+
+        function switchSection(sectionId) {
+            currentSection = sectionId;
+            currentQuestionIndex = 0;
+            
+            // Update active state in menu
+            document.querySelectorAll('.section-item').forEach((item, index) => {
+                const sectionKeys = Object.keys(questionBank);
+                if (sectionKeys[index] === sectionId) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+            
+            displayQuestion();
+            updateProgress();
+        }
+
+        function displayQuestion() {
+            const section = questionBank[currentSection];
+            if (!section || !section.questions.length) return;
+            
+            const question = section.questions[currentQuestionIndex];
+            const container = document.getElementById('questionContainer');
+            const savedAnswer = userAnswers[currentSection][currentQuestionIndex];
+            
+            let html = `
+                <div class="topic-header">
+                    <strong>${section.title}</strong>
+                </div>
+                <div class="question-card">
+                    <div class="question-text">${currentQuestionIndex + 1}. ${question.question}</div>
+            `;
+            
+            if (question.type === 'multiple-choice') {
+                html += `<div class="options-grid">`;
+                question.options.forEach((option, index) => {
+                    const isCorrect = savedAnswer !== undefined && savedAnswer === index;
+                    const isIncorrect = savedAnswer !== undefined && savedAnswer !== index && savedAnswer === question.correct;
+                    const selectedClass = savedAnswer !== undefined 
+                        ? (index === question.correct ? 'correct' : (savedAnswer === index ? 'incorrect' : ''))
+                        : '';
+                    
+                    html += `
+                        <button class="option-btn ${selectedClass}" onclick="checkAnswer(${index})" ${savedAnswer !== undefined ? 'disabled' : ''}>
+                            ${String.fromCharCode(65 + index)}. ${option}
+                        </button>
+                    `;
+                });
+                html += `</div>`;
+            } else if (question.type === 'true-false') {
+                html += `<div class="true-false-container">`;
+                [true, false].forEach((value, index) => {
+                    const isCorrect = savedAnswer !== undefined && savedAnswer === value;
+                    const isIncorrect = savedAnswer !== undefined && savedAnswer !== value && savedAnswer === question.correct;
+                    const selectedClass = savedAnswer !== undefined 
+                        ? (value === question.correct ? 'correct' : (savedAnswer === value ? 'incorrect' : ''))
+                        : '';
+                    
+                    html += `
+                        <button class="option-btn tf-btn ${selectedClass}" onclick="checkAnswer(${value})" ${savedAnswer !== undefined ? 'disabled' : ''}>
+                            ${value ? 'TRUE' : 'FALSE'}
+                        </button>
+                    `;
+                });
+                html += `</div>`;
+            }
+            
+            if (savedAnswer !== undefined && question.explanation) {
+                html += `
+                    <div class="feedback show">
+                        <strong>Explanation:</strong> ${question.explanation}
+                    </div>
+                `;
+            }
+            
+            html += `</div>`;
+            
+            container.innerHTML = html;
+            updateProgress();
+        }
+
+        function checkAnswer(answer) {
+            const section = questionBank[currentSection];
+            const question = section.questions[currentQuestionIndex];
+            
+            // Save answer
+            userAnswers[currentSection][currentQuestionIndex] = answer;
+            
+            // Update score
+            if (!score[currentSection].answered) {
+                score[currentSection].answered = 0;
+            }
+            
+            // Check if this question was previously answered correctly
+            const wasCorrect = score[currentSection].correctAnswers && 
+                              score[currentSection].correctAnswers[currentQuestionIndex];
+            
+            if (!wasCorrect && answer === question.correct) {
+                score[currentSection].correct = (score[currentSection].correct || 0) + 1;
+                if (!score[currentSection].correctAnswers) {
+                    score[currentSection].correctAnswers = {};
+                }
+                score[currentSection].correctAnswers[currentQuestionIndex] = true;
+            }
+            
+            score[currentSection].answered++;
+            
+            // Display updated question with feedback
+            displayQuestion();
+            updateProgress();
+            updateMastery();
+        }
+
+        function previousQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                displayQuestion();
+                updateProgress();
+            }
+        }
+
+        function nextQuestion() {
+            const section = questionBank[currentSection];
+            if (currentQuestionIndex < section.questions.length - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+                updateProgress();
+            }
+        }
+
+        function updateProgress() {
+            const section = questionBank[currentSection];
+            document.getElementById('questionCounter').textContent = 
+                `Question ${currentQuestionIndex + 1} of ${section.questions.length}`;
+            
+            const sectionScore = score[currentSection];
+            document.getElementById('scoreDisplay').textContent = 
+                `Score: ${sectionScore.correct || 0}/${sectionScore.answered || 0}`;
+            
+            updateTotalQuestions();
+        }
+
+        function updateTotalQuestions() {
+            const totalQuestions = Object.values(questionBank).reduce((sum, section) => 
+                sum + section.questions.length, 0
+            );
+            
+            const totalAnswered = Object.values(score).reduce((sum, s) => 
+                sum + (s.answered || 0), 0
+            );
+            
+            const totalCorrect = Object.values(score).reduce((sum, s) => 
+                sum + (s.correct || 0), 0
+            );
+            
+            document.getElementById('totalQuestions').textContent = totalQuestions;
+            document.getElementById('completedCount').textContent = totalAnswered;
+            
+            // Update mastery
+            updateMastery();
+        }
+
+        function updateMastery() {
+            const totalCorrect = Object.values(score).reduce((sum, s) => 
+                sum + (s.correct || 0), 0
+            );
+            const totalQuestions = Object.values(questionBank).reduce((sum, section) => 
+                sum + section.questions.length, 0
+            );
+            
+            const masteryPercent = totalQuestions > 0 ? (totalCorrect / totalQuestions) * 100 : 0;
+            document.getElementById('masteryFill').style.width = masteryPercent + '%';
+            
+            let masteryText = 'Beginner Naturalist';
+            if (masteryPercent >= 90) masteryText = '🏆 Master Zoologist!';
+            else if (masteryPercent >= 75) masteryText = '🌟 Expert Naturalist';
+            else if (masteryPercent >= 50) masteryText = '📚 Advanced Student';
+            else if (masteryPercent >= 25) masteryText = '🌱 Growing Knowledge';
+            
+            document.getElementById('masteryText').textContent = masteryText;
+        }
+
+        function resetSection() {
+            if (confirm('Are you sure you want to reset your progress in this section?')) {
+                score[currentSection] = {
+                    correct: 0,
+                    answered: 0,
+                    correctAnswers: {}
+                };
+                userAnswers[currentSection] = {};
+                currentQuestionIndex = 0;
+                displayQuestion();
+                updateProgress();
+                updateMastery();
+            }
+        }
+
+        // Initialize the app
+        initializeSections();
+        displayQuestion();
+
+        // Make functions globally available
+        window.checkAnswer = checkAnswer;
+        window.previousQuestion = previousQuestion;
+        window.nextQuestion = nextQuestion;
+        window.switchSection = switchSection;
+        window.resetSection = resetSection;
+    </script>
+</body>
+</html>
