@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AJHD Science Study Suite</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            padding: 30px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 50px;
+        }
+
+        header h1 {
+            font-size: 3em;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        header p {
+            font-size: 1.3em;
+            opacity: 0.95;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .book-info {
+            background: rgba(255,255,255,0.15);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 30px auto;
+            max-width: 600px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .book-info h2 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            color: #ffd700;
+        }
+
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .module-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            border: none;
+        }
+
+        .module-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+        }
+
+        .card-header {
+            padding: 30px 20px;
+            text-align: center;
+            color: white;
+        }
+
+        .card-header.volume1 {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .card-header.volume2 {
+            background: linear-gradient(135deg, #16a085 0%, #27ae60 100%);
+        }
+
+        .card-header.volume3 {
+            background: linear-gradient(135deg, #8e44ad 0%, #3498db 100%);
+        }
+
+        .card-header h2 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+        }
+
+        .card-header .volume-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 5px 15px;
+            border-radius: 25px;
+            font-size: 0.9em;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .card-body {
+            padding: 25px;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            color: #6c757d;
+            margin-top: 5px;
+        }
+
+        .description {
+            color: #4a5568;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .features {
+            list-style: none;
+            margin-top: 15px;
+        }
+
+        .features li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .features li:last-child {
+            border-bottom: none;
+        }
+
+        .features li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #27ae60;
+            font-weight: bold;
+        }
+
+        .badge-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 20px;
+        }
+
+        .badge {
+            background: #e9ecef;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            color: #495057;
+        }
+
+        .badge.blue {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .badge.green {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .badge.purple {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+
+        footer {
+            text-align: center;
+            color: white;
+            margin-top: 60px;
+            padding: 20px;
+            opacity: 0.8;
+            font-size: 0.95em;
+            border-top: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .footer-note {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-size: 1.1em;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2.2em;
+            }
+            
+            header p {
+                font-size: 1.1em;
+            }
+            
+            .modules-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📚 AJHD Science Study Suite</h1>
+            <p>Your complete companion for the Academic Junior High Decathlon Science Individual Test</p>
+            
+            <div class="book-info">
+                <h2>📖 Based on</h2>
+                <p style="font-size: 1.2em;"><strong>"Animals: A Visual Encyclopedia"</strong><br>by DK Smithsonian</p>
+                <p style="margin-top: 10px;">Pages 110-291 | Birds · Reptiles · Amphibians · Fish · Invertebrates</p>
+            </div>
+        </header>
+
+        <div class="modules-grid">
+            <!-- Volume 1 Card -->
+            <a href="science1.html" class="module-card">
+                <div class="card-header volume1">
+                    <h2>Volume 1</h2>
+                    <div class="volume-badge">Foundation Review</div>
+                </div>
+                <div class="card-body">
+                    <div class="stats">
+                        <div class="stat-item">
+                            <div class="stat-value">60+</div>
+                            <div class="stat-label">Questions</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">7</div>
+                            <div class="stat-label">Sections</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">📘</div>
+                            <div class="stat-label">Blue Series</div>
+                        </div>
+                    </div>
+                    
+                    <div class="description">
+                        <strong>Core section review questions</strong> directly from the study guide's vocabulary and review sections.
+                    </div>
+                    
+                    <ul class="features">
+                        <li>Birds - Parts 1 & 2 comprehensive review</li>
+                        <li>Reptiles, Amphibians, and Fish basics</li>
+                        <li>Invertebrates - both parts covered</li>
+                        <li>Perfect for initial learning and vocabulary building</li>
+                        <li>Includes page references for every answer</li>
+                    </ul>
+
+                    <div class="badge-container">
+                        <span class="badge blue">Multiple Choice</span>
+                        <span class="badge blue">True/False</span>
+                        <span class="badge blue">Fill-in-blank</span>
+                        <span class="badge blue">Matching</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Volume 2 Card -->
+            <a href="science2.html" class="module-card">
+                <div class="card-header volume2">
+                    <h2>Volume 2</h2>
+                    <div class="volume-badge">Practice Tests</div>
+                </div>
+                <div class="card-body">
+                    <div class="stats">
+                        <div class="stat-item">
+                            <div class="stat-value">50+</div>
+                            <div class="stat-label">Questions</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">8</div>
+                            <div class="stat-label">Sections</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">📗</div>
+                            <div class="stat-label">Green Series</div>
+                        </div>
+                    </div>
+                    
+                    <div class="description">
+                        <strong>Practice test questions</strong> pulled directly from the study guide's two official practice tests.
+                    </div>
+                    
+                    <ul class="features">
+                        <li>Questions from Practice Test 1 & 2</li>
+                        <li>Mixed review section included</li>
+                        <li>Rotating "Did You Know?" fun facts</li>
+                        <li>Test-taking format preparation</li>
+                        <li>Challenging application questions</li>
+                    </ul>
+
+                    <div class="badge-container">
+                        <span class="badge green">Exam Format</span>
+                        <span class="badge green">Fun Facts</span>
+                        <span class="badge green">Mixed Review</span>
+                        <span class="badge green">Practice Tests</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Volume 3 Card -->
+            <a href="science3.html" class="module-card">
+                <div class="card-header volume3">
+                    <h2>Volume 3</h2>
+                    <div class="volume-badge">Advanced Mastery</div>
+                </div>
+                <div class="card-body">
+                    <div class="stats">
+                        <div class="stat-item">
+                            <div class="stat-value">50+</div>
+                            <div class="stat-label">Questions</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">8</div>
+                            <div class="stat-label">Sections</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">📙</div>
+                            <div class="stat-label">Purple Series</div>
+                        </div>
+                    </div>
+                    
+                    <div class="description">
+                        <strong>Advanced species details</strong> and challenge questions for complete mastery.
+                    </div>
+                    
+                    <ul class="features">
+                        <li>Detailed species-specific information</li>
+                        <li>Life cycles and reproductive strategies</li>
+                        <li>Final challenge questions section</li>
+                        <li>Mastery tracking with tiered achievements</li>
+                        <li>Covers material from all sections in-depth</li>
+                    </ul>
+
+                    <div class="badge-container">
+                        <span class="badge purple">Mastery Meter</span>
+                        <span class="badge purple">Challenge</span>
+                        <span class="badge purple">In-depth</span>
+                        <span class="badge purple">Complete</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Study Tips Section -->
+        <div style="margin-top: 60px; background: white; border-radius: 20px; padding: 30px;">
+            <h2 style="color: #2c3e50; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                <span>🎯</span> How to Use This Study Suite
+            </h2>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                <div style="padding: 15px; background: #f8f9fa; border-radius: 10px;">
+                    <h3 style="color: #667eea; margin-bottom: 10px;">Step 1: Volume 1</h3>
+                    <p>Start with the foundation questions to learn key vocabulary and basic concepts from each section.</p>
+                </div>
+                
+                <div style="padding: 15px; background: #f8f9fa; border-radius: 10px;">
+                    <h3 style="color: #27ae60; margin-bottom: 10px;">Step 2: Volume 2</h3>
+                    <p>Move to practice test questions to familiarize yourself with the exam format and identify weak areas.</p>
+                </div>
+                
+                <div style="padding: 15px; background: #f8f9fa; border-radius: 10px;">
+                    <h3 style="color: #8e44ad; margin-bottom: 10px;">Step 3: Volume 3</h3>
+                    <p>Tackle advanced questions and track your mastery. Aim for "Master Zoologist!" status.</p>
+                </div>
+            </div>
+            
+            <div style="margin-top: 25px; padding: 20px; background: #fff3cd; border-radius: 10px; border-left: 5px solid #ffc107;">
+                <p style="color: #856404; margin: 0;">
+                    <strong>💡 Pro Tip:</strong> Each volume has instant feedback and page references back to the DK Smithsonian book. 
+                    Use the page numbers to review material in the original text when you need more context.
+                </p>
+            </div>
+        </div>
+
+        <!-- Quick Stats -->
+        <div style="margin-top: 30px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; color: white; text-align: center;">
+            <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px;">
+                <div style="font-size: 2em; font-weight: bold;">160+</div>
+                <div>Total Questions</div>
+            </div>
+            <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px;">
+                <div style="font-size: 2em; font-weight: bold;">23</div>
+                <div>Topic Sections</div>
+            </div>
+            <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px;">
+                <div style="font-size: 2em; font-weight: bold;">4</div>
+                <div>Question Types</div>
+            </div>
+            <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px;">
+                <div style="font-size: 2em; font-weight: bold;">100%</div>
+                <div>Page Referenced</div>
+            </div>
+        </div>
+
+        <footer>
+            <p>© 2026 Academic Junior High Decathlon Science Study Companion</p>
+            <p>Created from the official study guide • For educational use only</p>
+            <div class="footer-note">
+                📍 Covers pages 110-291 • Birds • Reptiles • Amphibians • Fish • Invertebrates
+            </div>
+        </footer>
+    </div>
+</body>
+</html>
