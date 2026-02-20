@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AJHD Science Study Companion - Volume 2</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #2c3e50 0%, #27ae60 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #16a085, #27ae60);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            display: flex;
+            min-height: 600px;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: #f8f9fa;
+            padding: 20px;
+            border-right: 2px solid #e9ecef;
+            overflow-y: auto;
+        }
+
+        .sidebar h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #27ae60;
+        }
+
+        .section-menu {
+            list-style: none;
+        }
+
+        .section-item {
+            padding: 12px 15px;
+            margin: 5px 0;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid #dee2e6;
+            font-weight: 500;
+        }
+
+        .section-item:hover {
+            background: #27ae60;
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .section-item.active {
+            background: #27ae60;
+            color: white;
+            border-color: #1e8449;
+        }
+
+        .question-area {
+            flex: 1;
+            padding: 30px;
+            background: white;
+            position: relative;
+        }
+
+        .progress-indicator {
+            background: #e9ecef;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .question-counter {
+            font-size: 1.1em;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+
+        .score-badge {
+            background: #2c3e50;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 25px;
+            font-weight: bold;
+        }
+
+        .question-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-left: 5px solid #27ae60;
+        }
+
+        .question-text {
+            font-size: 1.2em;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-gap: 12px;
+            margin: 20px 0;
+        }
+
+        .option-btn {
+            padding: 15px 20px;
+            background: white;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: left;
+            font-size: 1em;
+            width: 100%;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background: #e8f8f5;
+            border-color: #27ae60;
+        }
+
+        .option-btn.correct {
+            background: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+        }
+
+        .option-btn.incorrect {
+            background: #f8d7da;
+            border-color: #dc3545;
+            color: #721c24;
+        }
+
+        .feedback {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background: #fff3cd;
+            border: 1px solid #ffeeba;
+            color: #856404;
+            display: none;
+        }
+
+        .feedback.show {
+            display: block;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #e9ecef;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: #1e8449;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .reset-btn {
+            background: #dc3545;
+            color: white;
+            margin-left: 10px;
+        }
+
+        .reset-btn:hover {
+            background: #c82333;
+        }
+
+        .topic-header {
+            background: #2c3e50;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .true-false-container {
+            display: flex;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .tf-btn {
+            flex: 1;
+            padding: 15px;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .fill-blank-input {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.1em;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+
+        .fill-blank-input:focus {
+            outline: none;
+            border-color: #27ae60;
+        }
+
+        .matching-container {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+        }
+
+        .matching-item {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            padding: 8px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+
+        .matching-item select {
+            margin-left: 15px;
+            padding: 5px;
+            border-radius: 4px;
+            border: 1px solid #dee2e6;
+        }
+
+        .fun-fact {
+            background: #d4edda;
+            border-left: 5px solid #27ae60;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 5px;
+            font-style: italic;
+        }
+
+        footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 2px solid #e9ecef;
+            }
+            
+            .question-area {
+                padding: 20px;
+            }
+            
+            .true-false-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📚 AJHD Science Study Companion - Volume 2</h1>
+            <p>Based on "Animals: A Visual Encyclopedia" by DK Smithsonian</p>
+            <p>📖 More Questions from Pages 110-291 | Practice Tests Edition</p>
+        </header>
+
+        <div class="main-content">
+            <div class="sidebar">
+                <h3>📋 Study Sections</h3>
+                <ul class="section-menu" id="sectionMenu">
+                    <!-- Sections will be populated by JavaScript -->
+                </ul>
+                <div style="margin-top: 20px; padding: 15px; background: #e9ecef; border-radius: 8px;">
+                    <p style="color: #2c3e50; font-size: 0.9em;">
+                        <strong>📊 Statistics:</strong><br>
+                        Total Questions: <span id="totalQuestions">0</span><br>
+                        Completed: <span id="completedCount">0</span>
+                    </p>
+                </div>
+                <div class="fun-fact" style="margin-top: 15px;">
+                    <strong>💡 Did You Know?</strong>
+                    <p id="funFactDisplay">Turtles use muscles on the tops of their legs to breathe since they can't move their ribs!</p>
+                </div>
+            </div>
+
+            <div class="question-area">
+                <div class="progress-indicator">
+                    <span class="question-counter" id="questionCounter">Question 1 of 10</span>
+                    <span class="score-badge" id="scoreDisplay">Score: 0/0</span>
+                </div>
+
+                <div id="questionContainer">
+                    <!-- Questions will be displayed here -->
+                </div>
+
+                <div class="nav-buttons">
+                    <button class="btn btn-secondary" id="prevBtn" onclick="previousQuestion()">← Previous</button>
+                    <div>
+                        <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()">Next →</button>
+                        <button class="btn reset-btn" id="resetBtn" onclick="resetSection()">Reset Section</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>© 2026 Academic Junior High Decathlon Study Guide | Volume 2 - Practice Test Edition</p>
+        </footer>
+    </div>
+
+    <script>
+        // Question database structure - Volume 2 with new questions from practice tests
+        const questionBank = {
+            section1: {
+                title: "Birds - Part 1 (Practice Test Questions)",
+                questions: [
+                    {
+                        type: "multiple-choice",
+                        question: "Which bird raises their young with the help of up to four other adults?",
+                        options: [
+                            "European bee-eater",
+                            "Laughing kookaburra", 
+                            "Great Indian hornbill",
+                            "Pied kingfisher"
+                        ],
+                        correct: 3,
+                        explanation: "The pied kingfisher has unusual breeding habits, raising young with help from up to four other kingfishers. (Page 139, Practice Test 1 Q3)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "Which penguin species swims fastest underwater?",
+                        options: [
+                            "Royal penguin",
+                            "Emperor penguin",
+                            "Gentoo penguin",
+                            "Little penguin"
+                        ],
+                        correct: 2,
+                        explanation: "The gentoo penguin is the fastest swimmer among penguins. (Page 129, Practice Test 1 Q11)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "Which bird has the largest wings of any bird?",
+                        options: [
+                            "Ostrich",
+                            "Peregrine falcon",
+                            "Andean condor",
+                            "Bald eagle"
+                        ],
+                        correct: 2,
+                        explanation: "The Andean condor has one of the largest wingspans of any bird. (Page 119, Practice Test 1 Q35)"
+                    },
+                    {
+                        type: "true-false",
+                        question: "The secretary bird is endangered and eats snakes, insects and small rodents.",
+                        correct: true,
+                        explanation: "True. The secretary bird is found in central and southern Africa and is endangered. (Page 119)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "What feature helps the great horned owl succeed at hunting?",
+                        options: [
+                            "Excellent hearing",
+                            "Silent flight",
+                            "Sharp talons",
+                            "All of the above"
+                        ],
+                        correct: 3,
+                        explanation: "Great horned owls have multiple adaptations including silent flight, excellent hearing, and sharp talons. (Page 122-123)"
+                    }
+                ]
+            },
+            section2: {
+                title: "Birds - Part 2 (Practice Test Questions)",
+                questions: [
+                    {
+                        type: "multiple-choice",
+                        question: "Where are cliff swallows found on Earth?",
+                        options: [
+                            "Europe and Northern North America",
+                            "Southern Europe, Africa, Asia",
+                            "Alaska, Mexico, and South America",
+                            "North America, Central America and the Pacific islands"
+                        ],
+                        correct: 2,
+                        explanation: "Cliff swallows are found in open habitats in Alaska, Mexico, and South America. (Page 155, Practice Test 1 Q10)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "Which of the following perching birds can walk along riverbeds completely submerged under water?",
+                        options: [
+                            "Northern house martin",
+                            "White-throated dipper",
+                            "Red-whiskered bulbul",
+                            "Cliff swallow"
+                        ],
+                        correct: 1,
+                        explanation: "The white-throated dipper can walk along riverbeds completely submerged in water. (Page 153, Practice Test 1 Q18)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "How many species of woodpeckers and toucans are there?",
+                        options: [
+                            "Less than 200 species",
+                            "About 250 species",
+                            "More than 300 species",
+                            "More than 400 species"
+                        ],
+                        correct: 3,
+                        explanation: "There are more than 400 species of woodpeckers and toucans. (Page 148, Practice Test 1 Q26)"
+                    },
+                    {
+                        type: "true-false",
+                        question: "All hummingbirds are found in the Americas and have long pointed bills for drinking nectar.",
+                        correct: true,
+                        explanation: "True. All hummingbird species are found in the Americas and have long pointed bills to probe into flowers for nectar. (Page 147)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "Which species of bird inflates its scarlet throat pouch in a courtship display?",
+                        options: [
+                            "Great frigate bird",
+                            "Red-billed tropic bird",
+                            "Oriental darter",
+                            "Brown pelican"
+                        ],
+                        correct: 0,
+                        explanation: "The great frigate bird inflates its scarlet throat pouch during courtship displays. (Page 133, Practice Test 1 Q27)"
+                    }
+                ]
+            },
+            section3: {
+                title: "Reptiles (Practice Test Questions)",
+                questions: [
+                    {
+                        type: "multiple-choice",
+                        question: "The African rock python will eat cane rats but can also eat gazelles and goats. How long will it take to digest a gazelle?",
+                        options: [
+                            "3 months",
+                            "7 months",
+                            "12 months",
+                            "18 months"
+                        ],
+                        correct: 2,
+                        explanation: "It takes a whole year for an African rock python to digest a gazelle. (Page 171, Practice Test 1 Q4)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "What senses do snakes rely on for hunting prey?",
+                        options: [
+                            "Keen eyesight",
+                            "Good sense of hearing",
+                            "Tasting the air with their tongue",
+                            "All of the above"
+                        ],
+                        correct: 2,
+                        explanation: "Snakes primarily taste the air with their tongue to hunt prey, though some have heat-detecting organs. (Page 168, Practice Test 1 Q6)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "How old can a Galapagos tortoise live to be?",
+                        options: [
+                            "120 years",
+                            "135 years",
+                            "150 years",
+                            "170 years"
+                        ],
+                        correct: 2,
+                        explanation: "Galapagos tortoises can live up to 150 years. (Page 166, Practice Test 1 Q20)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "Which of the following snakes can move fast enough to overtake a running human?",
+                        options: [
+                            "Golden flying snake",
+                            "Black mamba",
+                            "Indian cobra",
+                            "Puff adder"
+                        ],
+                        correct: 1,
+                        explanation: "The black mamba is a fast-moving venomous snake that can overtake a running human. (Page 173, Practice Test 1 Q31)"
+                    },
+                    {
+                        type: "true-false",
+                        question: "Snakes shed their skin between four and eight times a year.",
+                        correct: true,
+                        explanation: "True. Snakes shed between four and eight times a year. (Page 168)"
+                    }
+                ]
+            },
+            section4: {
+                title: "Amphibians (Practice Test Questions)",
+                questions: [
+                    {
+                        type: "multiple-choice",
+                        question: "Which of the following is NOT an amphibian?",
+                        options: [
+                            "Salamanders",
+                            "Frogs",
+                            "Toads",
+                            "Tegus"
+                        ],
+                        correct: 3,
+                        explanation: "Tegus are lizards (reptiles), not amphibians. (Page 179, Practice Test 1 Q21)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "Which of the following is NOT TRUE of the Surinam toad?",
+                        options: [
+                            "Eggs are absorbed onto the female's back",
+                            "They live entirely underwater",
+                            "It is found in Australia and New Zealand",
+                            "It has feelers on its fingers"
+                        ],
+                        correct: 2,
+                        explanation: "The Surinam toad is found in South America, not Australia and New Zealand. (Page 193, Practice Test 1 Q7)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "How many species of amphibians are there in total?",
+                        options: [
+                            "About 4,500",
+                            "About 7,200",
+                            "About 8,100",
+                            "About 8,600"
+                        ],
+                        correct: 3,
+                        explanation: "There are about 8,600 species of amphibians. (Page 186, Practice Test 1 Q46)"
+                    },
+                    {
+                        type: "true-false",
+                        question: "The Mexican burrowing toad calls for a mate after heavy rains.",
+                        correct: true,
+                        explanation: "True. The Mexican burrowing toad calls for a mate after heavy rains. (Page 191)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "Which amphibian makes its home in a cave, lives in total darkness and never leaves the water?",
+                        options: [
+                            "Emperor newt",
+                            "Olm",
+                            "Jordan's salamander",
+                            "Axolotl"
+                        ],
+                        correct: 1,
+                        explanation: "The olm lives in caves, is nearly blind, and never leaves the water. (Page 189, Practice Test 1 Q13)"
+                    }
+                ]
+            },
+            section5: {
+                title: "Fish (Practice Test Questions)",
+                questions: [
+                    {
+                        type: "multiple-choice",
+                        question: "The whale shark is the biggest fish in the world. What does it eat?",
+                        options: [
+                            "Shoaling fish",
+                            "Seals and dolphins",
+                            "Large fish and octopuses",
+                            "Plankton and fish eggs"
+                        ],
+                        correct: 3,
+                        explanation: "Whale sharks eat plankton and fish eggs by filtering them from the water. (Page 208, Practice Test 1 Q22)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "How many species of sharks are there?",
+                        options: [
+                            "Over 250",
+                            "Over 320",
+                            "Over 440",
+                            "Over 500"
+                        ],
+                        correct: 2,
+                        explanation: "There are over 440 species of sharks. (Page 204, Practice Test 2 Q5)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "Photophores help groups of metallic lantern fish:",
+                        options: [
+                            "See each other in dark waters",
+                            "Navigate the ocean floor",
+                            "Regulate body temperature",
+                            "Attract mates"
+                        ],
+                        correct: 0,
+                        explanation: "Photophores produce light that helps fish see each other in dark waters. (Page 221, Practice Test 1 Q39)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "Which deep-sea fish has an enormous mouth wider than its body?",
+                        options: [
+                            "Pelican eel",
+                            "Yellow goosefish",
+                            "Frilled shark",
+                            "Atlantic football fish"
+                        ],
+                        correct: 0,
+                        explanation: "The pelican eel has a mouth much wider than its body and can consume food larger than itself. (Page 221, Practice Test 2 Q30)"
+                    },
+                    {
+                        type: "true-false",
+                        question: "All skates and rays have a flattened shape with fins that resemble wings.",
+                        correct: true,
+                        explanation: "True. All skates and rays share this characteristic body shape. (Page 210, Practice Test 2 Q46)"
+                    }
+                ]
+            },
+            section6: {
+                title: "Invertebrates - Part 1 (Practice Test Questions)",
+                questions: [
+                    {
+                        type: "multiple-choice",
+                        question: "Tadpole shrimp are able to survive freezing temperatures because:",
+                        options: [
+                            "They hibernate",
+                            "They lay eggs resistant to freezing",
+                            "They have extra insulating skin",
+                            "They produce antifreeze chemicals"
+                        ],
+                        correct: 1,
+                        explanation: "Tadpole shrimp eggs can survive freezing temperatures and drought. (Page 285, Practice Test 1 Q1)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "Where would you find the azure vase sponge?",
+                        options: [
+                            "Caribbean Sea",
+                            "Black Sea",
+                            "Coral Sea",
+                            "Mediterranean Sea"
+                        ],
+                        correct: 0,
+                        explanation: "The azure vase sponge is found in the Caribbean Sea. (Page 229, Practice Test 1 Q2)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "The first corals appeared on Earth about how many years ago?",
+                        options: [
+                            "700 thousand",
+                            "54 million",
+                            "240 million",
+                            "540 million"
+                        ],
+                        correct: 3,
+                        explanation: "The first corals appeared about 540 million years ago. (Page 234, Practice Test 1 Q5)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "What does the deer tick do to attach to its host?",
+                        options: [
+                            "Jumps like a flea",
+                            "Uses sharp claws to climb",
+                            "Waits and grabs with legs",
+                            "Drops from overhead"
+                        ],
+                        correct: 2,
+                        explanation: "Deer ticks wait for a host to walk by and grab hold with their legs. (Page 246, Practice Test 1 Q8)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "In what stage do dragonflies and damselflies spend most of their lives?",
+                        options: [
+                            "Egg",
+                            "Pupa",
+                            "Nymph",
+                            "Adult"
+                        ],
+                        correct: 2,
+                        explanation: "Dragonflies and damselflies live underwater as nymphs, only emerging as adults later. (Page 248, Practice Test 1 Q16)"
+                    }
+                ]
+            },
+            section7: {
+                title: "Invertebrates - Part 2 (Practice Test Questions)",
+                questions: [
+                    {
+                        type: "multiple-choice",
+                        question: "The leaf-cutter ants of Central and South America live in large colonies. How many ants may live in a single nest?",
+                        options: [
+                            "800,000",
+                            "1,000,000",
+                            "3,000,000",
+                            "5,000,000"
+                        ],
+                        correct: 3,
+                        explanation: "Leaf-cutter ant nests can have more than 5,000,000 ants. (Page 267, Practice Test 1 Q41)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "What does the king baboon spider eat?",
+                        options: [
+                            "Insects",
+                            "Mice",
+                            "Lizards",
+                            "All of the above"
+                        ],
+                        correct: 3,
+                        explanation: "King baboon spiders eat insects, mice, and lizards. (Page 280, Practice Test 1 Q9)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "How large can Japanese spider crabs grow?",
+                        options: [
+                            "Up to 3 feet across",
+                            "Up to 13 feet across",
+                            "Up to 20 feet across",
+                            "Up to 23 feet across"
+                        ],
+                        correct: 1,
+                        explanation: "Japanese spider crabs can grow up to 13 feet across with leg span. (Page 286, Practice Test 2 Q18)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "Which species of butterfly is the largest with a wingspan of up to 11 inches?",
+                        options: [
+                            "Blue morpho",
+                            "Queen Alexandra's birdwing",
+                            "African giant swallowtail",
+                            "Cairns birdwing"
+                        ],
+                        correct: 1,
+                        explanation: "Queen Alexandra's birdwing is the largest butterfly with an 11-inch wingspan. (Page 277, Practice Test 2 Q2)"
+                    },
+                    {
+                        type: "true-false",
+                        question: "Spider silk is made from protein and never decays or dries out.",
+                        correct: true,
+                        explanation: "True. Spider silk is made from protein and never decays or dries out. (Page 282-283)"
+                    }
+                ]
+            },
+            section8: {
+                title: "Mixed Practice Test Questions",
+                questions: [
+                    {
+                        type: "multiple-choice",
+                        question: "Gila monsters hunt mainly in the spring. How do they survive for long periods without hunting?",
+                        options: [
+                            "They hibernate",
+                            "They store fat in their tails",
+                            "They enter torpor",
+                            "They store food in caches"
+                        ],
+                        correct: 1,
+                        explanation: "Gila monsters store fat in their tails to survive when not hunting. (Page 174, Practice Test 1 Q12)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "Which worm can be found in the deep sea by hydrothermal vents?",
+                        options: [
+                            "Sea mouse",
+                            "Medicinal leech",
+                            "Peacock worm",
+                            "Giant tubeworm"
+                        ],
+                        correct: 3,
+                        explanation: "Giant tubeworms live near deep-sea hydrothermal vents. (Page 236, Practice Test 1 Q15)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "How long does it take the southern hawker nymph to become a winged adult?",
+                        options: [
+                            "1 year",
+                            "2 years",
+                            "3 years",
+                            "4 years"
+                        ],
+                        correct: 1,
+                        explanation: "The southern hawker nymph takes 2 years to become a winged adult. (Page 248, Practice Test 1 Q40)"
+                    },
+                    {
+                        type: "true-false",
+                        question: "Hard corals have an external skeleton made of limestone.",
+                        correct: false,
+                        explanation: "False. Hard corals have an internal skeleton made of limestone. (Page 234)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "Which crocodilian has a long, narrow snout and cannot walk on land?",
+                        options: [
+                            "Slender-snouted crocodile",
+                            "Gharial",
+                            "Spectacled caiman",
+                            "Dwarf crocodile"
+                        ],
+                        correct: 1,
+                        explanation: "The gharial has a long, narrow snout and cannot walk on land. (Page 182, Practice Test 1 Q45)"
+                    }
+                ]
+            }
+        };
+
+        // Fun facts database
+        const funFacts = [
+            "Turtles use muscles on the tops of their legs to breathe since they can't move their ribs!",
+            "There are 356 species of turtles in the world!",
+            "The peregrine falcon can dive up to 199 mph (320 kph)!",
+            "Penguins can dive down about 95ft and swim up to 9mph!",
+            "The wandering albatross takes nine years to mature into an adult!",
+            "Flamingos get their pink color from the food they eat!",
+            "The anaconda is the world's heaviest snake, weighing up to 550 lbs!",
+            "The golden poison dart frog contains enough poison to kill 10 humans!",
+            "More than half of all vertebrates are fish!",
+            "Invertebrates make up 95% of the animal kingdom!",
+            "The atlas moth is the largest moth and has markings that resemble a cobra snake!",
+            "Spider silk never decays or dries out!",
+            "A female scorpion can carry up to 100 babies on her back!",
+            "The estuarine stonefish is the most venomous fish in the world!",
+            "The great horned owl is America's largest owl!"
+        ];
+
+        // Global state
+        let currentSection = 'section1';
+        let currentQuestionIndex = 0;
+        let userAnswers = {};
+        let score = {};
+
+        // Initialize scores for all sections
+        Object.keys(questionBank).forEach(section => {
+            score[section] = {
+                correct: 0,
+                answered: 0
+            };
+            userAnswers[section] = {};
+        });
+
+        // Initialize sections menu
+        function initializeSections() {
+            const menu = document.getElementById('sectionMenu');
+            menu.innerHTML = '';
+            
+            Object.keys(questionBank).forEach((sectionId, index) => {
+                const section = questionBank[sectionId];
+                const li = document.createElement('li');
+                li.className = `section-item ${index === 0 ? 'active' : ''}`;
+                li.textContent = section.title;
+                li.onclick = () => switchSection(sectionId);
+                menu.appendChild(li);
+            });
+            
+            updateTotalQuestions();
+            updateFunFact();
+        }
+
+        function switchSection(sectionId) {
+            currentSection = sectionId;
+            currentQuestionIndex = 0;
+            
+            // Update active state in menu
+            document.querySelectorAll('.section-item').forEach((item, index) => {
+                const sectionKeys = Object.keys(questionBank);
+                if (sectionKeys[index] === sectionId) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+            
+            displayQuestion();
+            updateProgress();
+            updateFunFact();
+        }
+
+        function updateFunFact() {
+            const randomIndex = Math.floor(Math.random() * funFacts.length);
+            document.getElementById('funFactDisplay').textContent = funFacts[randomIndex];
+        }
+
+        function displayQuestion() {
+            const section = questionBank[currentSection];
+            if (!section || !section.questions.length) return;
+            
+            const question = section.questions[currentQuestionIndex];
+            const container = document.getElementById('questionContainer');
+            const savedAnswer = userAnswers[currentSection][currentQuestionIndex];
+            
+            let html = `
+                <div class="topic-header">
+                    <strong>${section.title}</strong>
+            `;
+            
+            if (question.type === 'matching') {
+                html += `<p style="color: #e9ecef; margin-top: 5px;">${question.question}</p>`;
+            }
+            
+            html += `</div>
+                <div class="question-card">
+                    <div class="question-text">${currentQuestionIndex + 1}. ${question.question}</div>
+            `;
+            
+            if (question.type === 'multiple-choice') {
+                html += `<div class="options-grid">`;
+                question.options.forEach((option, index) => {
+                    const isCorrect = savedAnswer !== undefined && savedAnswer === index;
+                    const isIncorrect = savedAnswer !== undefined && savedAnswer !== index && savedAnswer === question.correct;
+                    const selectedClass = savedAnswer !== undefined 
+                        ? (index === question.correct ? 'correct' : (savedAnswer === index ? 'incorrect' : ''))
+                        : '';
+                    
+                    html += `
+                        <button class="option-btn ${selectedClass}" onclick="checkAnswer(${index})" ${savedAnswer !== undefined ? 'disabled' : ''}>
+                            ${String.fromCharCode(65 + index)}. ${option}
+                        </button>
+                    `;
+                });
+                html += `</div>`;
+            } else if (question.type === 'true-false') {
+                html += `<div class="true-false-container">`;
+                [true, false].forEach((value, index) => {
+                    const isCorrect = savedAnswer !== undefined && savedAnswer === value;
+                    const isIncorrect = savedAnswer !== undefined && savedAnswer !== value && savedAnswer === question.correct;
+                    const selectedClass = savedAnswer !== undefined 
+                        ? (value === question.correct ? 'correct' : (savedAnswer === value ? 'incorrect' : ''))
+                        : '';
+                    
+                    html += `
+                        <button class="option-btn tf-btn ${selectedClass}" onclick="checkAnswer(${value})" ${savedAnswer !== undefined ? 'disabled' : ''}>
+                            ${value ? 'TRUE' : 'FALSE'}
+                        </button>
+                    `;
+                });
+                html += `</div>`;
+            }
+            
+            if (savedAnswer !== undefined && question.explanation) {
+                html += `
+                    <div class="feedback show">
+                        <strong>Explanation:</strong> ${question.explanation}
+                    </div>
+                `;
+            }
+            
+            html += `</div>`;
+            
+            container.innerHTML = html;
+            updateProgress();
+        }
+
+        function checkAnswer(answer) {
+            const section = questionBank[currentSection];
+            const question = section.questions[currentQuestionIndex];
+            
+            // Save answer
+            userAnswers[currentSection][currentQuestionIndex] = answer;
+            
+            // Update score
+            if (!score[currentSection].answered) {
+                score[currentSection].answered = 0;
+            }
+            
+            // Check if this question was previously answered correctly
+            const wasCorrect = score[currentSection].correctAnswers && 
+                              score[currentSection].correctAnswers[currentQuestionIndex];
+            
+            if (!wasCorrect && answer === question.correct) {
+                score[currentSection].correct = (score[currentSection].correct || 0) + 1;
+                if (!score[currentSection].correctAnswers) {
+                    score[currentSection].correctAnswers = {};
+                }
+                score[currentSection].correctAnswers[currentQuestionIndex] = true;
+            }
+            
+            score[currentSection].answered++;
+            
+            // Display updated question with feedback
+            displayQuestion();
+            updateProgress();
+            updateFunFact(); // Change fun fact when answering
+        }
+
+        function previousQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                displayQuestion();
+                updateProgress();
+            }
+        }
+
+        function nextQuestion() {
+            const section = questionBank[currentSection];
+            if (currentQuestionIndex < section.questions.length - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+                updateProgress();
+            }
+        }
+
+        function updateProgress() {
+            const section = questionBank[currentSection];
+            document.getElementById('questionCounter').textContent = 
+                `Question ${currentQuestionIndex + 1} of ${section.questions.length}`;
+            
+            const sectionScore = score[currentSection];
+            document.getElementById('scoreDisplay').textContent = 
+                `Score: ${sectionScore.correct || 0}/${sectionScore.answered || 0}`;
+            
+            updateTotalQuestions();
+        }
+
+        function updateTotalQuestions() {
+            const totalQuestions = Object.values(questionBank).reduce((sum, section) => 
+                sum + section.questions.length, 0
+            );
+            
+            const totalAnswered = Object.values(score).reduce((sum, s) => 
+                sum + (s.answered || 0), 0
+            );
+            
+            document.getElementById('totalQuestions').textContent = totalQuestions;
+            document.getElementById('completedCount').textContent = totalAnswered;
+        }
+
+        function resetSection() {
+            if (confirm('Are you sure you want to reset your progress in this section?')) {
+                score[currentSection] = {
+                    correct: 0,
+                    answered: 0,
+                    correctAnswers: {}
+                };
+                userAnswers[currentSection] = {};
+                currentQuestionIndex = 0;
+                displayQuestion();
+                updateProgress();
+                updateFunFact();
+            }
+        }
+
+        // Initialize the app
+        initializeSections();
+        displayQuestion();
+
+        // Make functions globally available
+        window.checkAnswer = checkAnswer;
+        window.previousQuestion = previousQuestion;
+        window.nextQuestion = nextQuestion;
+        window.switchSection = switchSection;
+        window.resetSection = resetSection;
+    </script>
+</body>
+</html>
