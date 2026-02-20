@@ -1,0 +1,1197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AJHD Science Study Companion</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            display: flex;
+            min-height: 600px;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: #f8f9fa;
+            padding: 20px;
+            border-right: 2px solid #e9ecef;
+            overflow-y: auto;
+        }
+
+        .sidebar h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+        }
+
+        .section-menu {
+            list-style: none;
+        }
+
+        .section-item {
+            padding: 12px 15px;
+            margin: 5px 0;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid #dee2e6;
+            font-weight: 500;
+        }
+
+        .section-item:hover {
+            background: #3498db;
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .section-item.active {
+            background: #3498db;
+            color: white;
+            border-color: #2980b9;
+        }
+
+        .question-area {
+            flex: 1;
+            padding: 30px;
+            background: white;
+            position: relative;
+        }
+
+        .progress-indicator {
+            background: #e9ecef;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .question-counter {
+            font-size: 1.1em;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+
+        .score-badge {
+            background: #2c3e50;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 25px;
+            font-weight: bold;
+        }
+
+        .question-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-left: 5px solid #3498db;
+        }
+
+        .question-text {
+            font-size: 1.2em;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-gap: 12px;
+            margin: 20px 0;
+        }
+
+        .option-btn {
+            padding: 15px 20px;
+            background: white;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: left;
+            font-size: 1em;
+            width: 100%;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background: #e3f2fd;
+            border-color: #3498db;
+        }
+
+        .option-btn.correct {
+            background: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+        }
+
+        .option-btn.incorrect {
+            background: #f8d7da;
+            border-color: #dc3545;
+            color: #721c24;
+        }
+
+        .feedback {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background: #fff3cd;
+            border: 1px solid #ffeeba;
+            color: #856404;
+            display: none;
+        }
+
+        .feedback.show {
+            display: block;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #e9ecef;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #3498db;
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .reset-btn {
+            background: #dc3545;
+            color: white;
+            margin-left: 10px;
+        }
+
+        .reset-btn:hover {
+            background: #c82333;
+        }
+
+        .topic-header {
+            background: #2c3e50;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .true-false-container {
+            display: flex;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .tf-btn {
+            flex: 1;
+            padding: 15px;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .fill-blank-input {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.1em;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+
+        .fill-blank-input:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .matching-container {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+        }
+
+        .matching-item {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            padding: 8px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+
+        .matching-item select {
+            margin-left: 15px;
+            padding: 5px;
+            border-radius: 4px;
+            border: 1px solid #dee2e6;
+        }
+
+        footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 2px solid #e9ecef;
+            }
+            
+            .question-area {
+                padding: 20px;
+            }
+            
+            .true-false-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📚 AJHD Science Study Companion</h1>
+            <p>Based on "Animals: A Visual Encyclopedia" by DK Smithsonian</p>
+            <p>📖 Pages 110-291 | Birds, Reptiles, Amphibians, Fish & Invertebrates</p>
+        </header>
+
+        <div class="main-content">
+            <div class="sidebar">
+                <h3>📋 Study Sections</h3>
+                <ul class="section-menu" id="sectionMenu">
+                    <!-- Sections will be populated by JavaScript -->
+                </ul>
+                <div style="margin-top: 20px; padding: 15px; background: #e9ecef; border-radius: 8px;">
+                    <p style="color: #2c3e50; font-size: 0.9em;">
+                        <strong>📊 Statistics:</strong><br>
+                        Total Questions: <span id="totalQuestions">0</span><br>
+                        Completed: <span id="completedCount">0</span>
+                    </p>
+                </div>
+            </div>
+
+            <div class="question-area">
+                <div class="progress-indicator">
+                    <span class="question-counter" id="questionCounter">Question 1 of 10</span>
+                    <span class="score-badge" id="scoreDisplay">Score: 0/0</span>
+                </div>
+
+                <div id="questionContainer">
+                    <!-- Questions will be displayed here -->
+                </div>
+
+                <div class="nav-buttons">
+                    <button class="btn btn-secondary" id="prevBtn" onclick="previousQuestion()">← Previous</button>
+                    <div>
+                        <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()">Next →</button>
+                        <button class="btn reset-btn" id="resetBtn" onclick="resetSection()">Reset Section</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>© 2026 Academic Junior High Decathlon Study Guide | For educational use only</p>
+        </footer>
+    </div>
+
+    <script>
+        // Question database structure
+        const questionBank = {
+            section1: {
+                title: "Birds - Part 1 (Pages 110-135)",
+                questions: [
+                    {
+                        type: "multiple-choice",
+                        question: "Birds are different from other vertebrates because they have:",
+                        options: ["Teeth and scales", "Feathered wings and bills", "Fur and claws", "Gills and fins"],
+                        correct: 1,
+                        explanation: "Birds are warm-blooded vertebrates with feathered wings and bills instead of toothed jaws. (Page 112)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "What is preening?",
+                        options: [
+                            "Keeping talons clean",
+                            "Building nests",
+                            "Cleaning and smoothing feathers with the beak",
+                            "Hunting for prey"
+                        ],
+                        correct: 2,
+                        explanation: "Preening is when a bird cleans and smooths its feathers with its beak. (Page 113)"
+                    },
+                    {
+                        type: "true-false",
+                        question: "Scientists have shown that birds are living dinosaurs descended from feathered hunters.",
+                        correct: true,
+                        explanation: "True. Scientists have been able to show that birds are living dinosaurs descended from feathered hunters. (Page 113)"
+                    },
+                    {
+                        type: "true-false",
+                        question: "One of the earliest known birds was the pterodactyl which appeared 150 million years ago.",
+                        correct: false,
+                        explanation: "False. One of the earliest known birds was the archaeopteryx, not the pterodactyl. (Page 113)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "Which type of feather provides the lift required for flight?",
+                        options: ["Contour feathers", "Down feathers", "Wing feathers", "Tail feathers"],
+                        correct: 2,
+                        explanation: "Wing feathers are long and rigid, providing the lift required for flight. (Page 112)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "What does a bird's skeleton consist of to help with flight?",
+                        options: ["Solid, heavy bones", "Mostly hollow bones", "Cartilage only", "Dense, marrow-filled bones"],
+                        correct: 1,
+                        explanation: "Birds' bones are mostly hollow to save weight for flight. (Page 112-113)"
+                    },
+                    {
+                        type: "true-false",
+                        question: "Bird young are completely independent once hatched and don't need their parents.",
+                        correct: false,
+                        explanation: "False. Bird young are dependent on their parents for food and protection. (Page 113)"
+                    },
+                    {
+                        type: "matching",
+                        question: "Match the bill shape to its function:",
+                        pairs: [
+                            { left: "Cone-shaped bill", right: "Breaking seeds open" },
+                            { left: "Sharp hooked bill", right: "Tearing prey" },
+                            { left: "Long narrow bill", right: "Extracting nectar" },
+                            { left: "Long strong pointed bill", right: "Catching fish" }
+                        ],
+                        explanation: "Different bill shapes are adapted for different types of food. (Page 113)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "What is a raptor?",
+                        options: [
+                            "A type of nest",
+                            "A bird of prey",
+                            "A flight feather",
+                            "A bird's call"
+                        ],
+                        correct: 1,
+                        explanation: "Raptors are birds of prey that feed wholly or chiefly on meat taken by hunting or on carrion. (Page 118)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "How fast can a peregrine falcon dive when hunting?",
+                        options: [
+                            "99 mph (160 kph)",
+                            "150 mph (240 kph)",
+                            "199 mph (320 kph)",
+                            "250 mph (400 kph)"
+                        ],
+                        correct: 2,
+                        explanation: "Peregrine falcons can dive up to 199 mph (320 kph) when hunting. (Page 118)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "The Golden Eagle has an impressive wingspan of:",
+                        options: [
+                            "5½ ft (1.7m)",
+                            "7½ ft (2.3m)",
+                            "9½ ft (2.9m)",
+                            "11½ ft (3.5m)"
+                        ],
+                        correct: 1,
+                        explanation: "The Golden Eagle has a wingspan of 7½ ft (2.3m). (Page 119)"
+                    },
+                    {
+                        type: "true-false",
+                        question: "The secretary bird is unlike other birds of prey because it has long legs and runs very fast.",
+                        correct: true,
+                        explanation: "True. The secretary bird hunts on the ground, running after prey and stomping on it with its talons. (Page 119)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "What adaptation helps the Osprey catch fish?",
+                        options: [
+                            "Webbed feet",
+                            "Talons that can grip both sides of a fish",
+                            "A pouch for storing fish",
+                            "Waterproof feathers"
+                        ],
+                        correct: 1,
+                        explanation: "Ospreys have talons that can move to grip both sides of the fish and small spines on the soles of their feet to hold onto the catch. (Page 119)"
+                    },
+                    {
+                        type: "true-false",
+                        question: "Owls have soft plumage that allows them to be nearly silent when they fly.",
+                        correct: true,
+                        explanation: "True. Owls have specialized feathers that muffle sound, allowing for silent flight. (Page 122)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "What do owls regurgitate after swallowing their prey whole?",
+                        options: [
+                            "Feathers",
+                            "Pellets containing bones and fur",
+                            "Undigested meat",
+                            "Egg shells"
+                        ],
+                        correct: 1,
+                        explanation: "Owls regurgitate pellets that contain the indigestible parts including bones, fur, and claws. (Page 122)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "Which owl is America's largest owl?",
+                        options: [
+                            "Snowy owl",
+                            "Great horned owl",
+                            "Barn owl",
+                            "Eastern screech owl"
+                        ],
+                        correct: 1,
+                        explanation: "The great horned owl is America's largest owl. (Page 123)"
+                    },
+                    {
+                        type: "true-false",
+                        question: "Penguins are flightless birds that are fast, graceful swimmers.",
+                        correct: true,
+                        explanation: "True. Penguins are adapted for swimming with streamlined bodies and flipper-like wings. (Page 128)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "Where are penguins found?",
+                        options: [
+                            "Both Arctic and Antarctic poles",
+                            "Only in the Arctic",
+                            "Seas and cold currents of the southern hemisphere",
+                            "All cold ocean waters worldwide"
+                        ],
+                        correct: 2,
+                        explanation: "Penguins are found only in the seas and cold currents of the southern hemisphere. (Page 128)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "How deep can penguins dive and how fast can they swim?",
+                        options: [
+                            "50ft at 5mph",
+                            "75ft at 7mph",
+                            "95ft at 9mph",
+                            "120ft at 12mph"
+                        ],
+                        correct: 2,
+                        explanation: "Penguins can dive down about 95ft and swim up to 9mph. (Page 128)"
+                    },
+                    {
+                        type: "true-false",
+                        question: "The Emperor Penguin breeds during the harsh Antarctic winter.",
+                        correct: true,
+                        explanation: "True. Emperor Penguins breed during the Antarctic winter, with males caring for the egg on their feet for two months. (Page 129)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "What feature do all pelicans and their relatives have in common?",
+                        options: [
+                            "Brightly colored feathers",
+                            "Webbing between all four toes",
+                            "Long curved beaks",
+                            "The ability to dive deep"
+                        ],
+                        correct: 1,
+                        explanation: "Pelicans and their relatives are the only birds with webbing between all four toes. (Page 132)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "The wandering albatross takes how long to mature into adults?",
+                        options: [
+                            "5 years",
+                            "7 years",
+                            "9 years",
+                            "12 years"
+                        ],
+                        correct: 2,
+                        explanation: "The wandering albatross takes nine years to mature into adults. (Page 130-131)"
+                    },
+                    {
+                        type: "true-false",
+                        question: "The great horned owl has both parents helping to take care of the young after hatching.",
+                        correct: true,
+                        explanation: "True. Both male and female great horned owls help take care of the young after hatching. (Page 123)"
+                    }
+                ]
+            },
+            section2: {
+                title: "Birds - Part 2 (Pages 136-159)",
+                questions: [
+                    {
+                        type: "true-false",
+                        question: "Snow geese migrate to their nesting grounds; a trip that takes over 10 weeks.",
+                        correct: true,
+                        explanation: "True. Snow geese migrate long distances to their nesting grounds. (Page 136)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "Why do migrating birds fly in a V-formation?",
+                        options: [
+                            "To see each other better",
+                            "To communicate during flight",
+                            "To fly in the slipstream and save energy",
+                            "To stay warm"
+                        ],
+                        correct: 2,
+                        explanation: "Birds fly in a V-formation so each bird can fly in the slipstream of the one in front, allowing them to do less work and save energy. (Page 137)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "The great Indian hornbill has a large yellow _____ on their head.",
+                        options: [
+                            "Crest",
+                            "Casque",
+                            "Wattle",
+                            "Frill"
+                        ],
+                        correct: 1,
+                        explanation: "The great Indian hornbill has a large yellow casque on their head. (Page 139)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "How does the European bee-eater handle stinging insects?",
+                        options: [
+                            "It avoids them completely",
+                            "It swallows them whole",
+                            "It rubs the insect's tail on a perch to remove the sting",
+                            "It has immunity to the sting"
+                        ],
+                        correct: 2,
+                        explanation: "The European bee-eater rubs the insect's tail on a perch and squeezes it to remove the sting. (Page 139)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "Why are flamingos pink?",
+                        options: [
+                            "It's their natural color",
+                            "From the food they eat (algae and brine shrimp)",
+                            "From the water they drink",
+                            "From minerals in their environment"
+                        ],
+                        correct: 1,
+                        explanation: "Flamingos get their pink color from the algae they eat or from brine shrimp that have eaten the algae. (Page 140)"
+                    }
+                ]
+            },
+            section3: {
+                title: "Reptiles (Pages 160-183)",
+                questions: [
+                    {
+                        type: "multiple-choice",
+                        question: "What makes reptiles different from mammals and birds?",
+                        options: [
+                            "They are warm-blooded",
+                            "They are cold-blooded and have scaly skin",
+                            "They give birth to live young",
+                            "They have fur"
+                        ],
+                        correct: 1,
+                        explanation: "Unlike mammals and birds, reptiles are cold-blooded, have scaly skin, and most reproduce by laying eggs. (Page 162)"
+                    },
+                    {
+                        type: "true-false",
+                        question: "The shape of a reptile's eye pupil can tell you if the animal is active at night or during the day.",
+                        correct: true,
+                        explanation: "True. Reptiles active at night have slit-like pupils that can close tightly in bright daylight. (Page 163)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "How do turtles breathe since they cannot move their ribs?",
+                        options: [
+                            "Through their skin",
+                            "They use muscles on the tops of their legs",
+                            "They have gills",
+                            "They hold their breath for long periods"
+                        ],
+                        correct: 1,
+                        explanation: "Turtles use muscles on the tops of their legs to pump air in and out of their lungs. (Page 166)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "What is a constrictor?",
+                        options: [
+                            "A snake with venom",
+                            "A snake that kills by wrapping around prey and squeezing",
+                            "A snake that lives in water",
+                            "A snake that only eats eggs"
+                        ],
+                        correct: 1,
+                        explanation: "Constrictors kill prey by wrapping coils around them and squeezing to cut off blood flow. (Page 169)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "The world's heaviest snake is the:",
+                        options: [
+                            "Reticulated python",
+                            "African rock python",
+                            "Anaconda",
+                            "Green anaconda"
+                        ],
+                        correct: 2,
+                        explanation: "The anaconda is the world's heaviest snake, weighing up to 550 lbs. (Page 171)"
+                    }
+                ]
+            },
+            section4: {
+                title: "Amphibians (Pages 184-199)",
+                questions: [
+                    {
+                        type: "multiple-choice",
+                        question: "What is metamorphosis in amphibians?",
+                        options: [
+                            "The ability to change color",
+                            "The change from larval stage to adult",
+                            "The method of hunting",
+                            "The way they communicate"
+                        ],
+                        correct: 1,
+                        explanation: "Metamorphosis is the change from larval stage (like tadpoles) to adult form. (Page 186)"
+                    },
+                    {
+                        type: "true-false",
+                        question: "All newts are salamanders but not all salamanders are newts.",
+                        correct: true,
+                        explanation: "True. There is no real difference between newts and salamanders, but all newts are salamanders. (Page 188)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "What is special about amphibian skin?",
+                        options: [
+                            "It's thick and waterproof",
+                            "It's thin, absorbent, and they can breathe through it",
+                            "It's covered in scales",
+                            "It produces oil"
+                        ],
+                        correct: 1,
+                        explanation: "Amphibian skin is thin enough to breathe through and has mucus glands to keep it damp. (Page 187)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "What is the largest amphibian in the world?",
+                        options: [
+                            "Goliath frog",
+                            "Chinese giant salamander",
+                            "Marine toad",
+                            "Axolotl"
+                        ],
+                        correct: 1,
+                        explanation: "The Chinese giant salamander is the largest of all amphibians. (Page 189)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "The golden poison dart frog's skin contains enough poison to:",
+                        options: [
+                            "Kill 5 humans",
+                            "Kill 10 humans",
+                            "Kill 15 humans",
+                            "Kill 20 humans"
+                        ],
+                        correct: 1,
+                        explanation: "The golden poison dart frog contains enough poison to kill 10 humans and is thought to be the only animal that can kill by touch alone. (Page 196)"
+                    }
+                ]
+            },
+            section5: {
+                title: "Fish (Pages 200-223)",
+                questions: [
+                    {
+                        type: "multiple-choice",
+                        question: "More than half of all vertebrates are:",
+                        options: [
+                            "Mammals",
+                            "Birds",
+                            "Fish",
+                            "Reptiles"
+                        ],
+                        correct: 2,
+                        explanation: "More than half of all vertebrates are fish. (Page 202)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "What is the operculum?",
+                        options: [
+                            "A type of fin",
+                            "The bony flap that covers the gills",
+                            "A sensory organ",
+                            "The tail fin"
+                        ],
+                        correct: 1,
+                        explanation: "The operculum is the bony flap that covers the gills of fish. (Page 203)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "How many species of sharks are there?",
+                        options: [
+                            "Over 250",
+                            "Over 320",
+                            "Over 440",
+                            "Over 500"
+                        ],
+                        correct: 2,
+                        explanation: "There are over 440 species of sharks. (Page 204)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "The most venomous fish in the world is the:",
+                        options: [
+                            "Stonefish",
+                            "Lionfish",
+                            "Puffer fish",
+                            "Scorpion fish"
+                        ],
+                        correct: 0,
+                        explanation: "The estuarine stonefish is the most venomous fish in the world, with 13 venomous spines along its back. (Page 217)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "What is an anadromous fish?",
+                        options: [
+                            "Fish that live only in salt water",
+                            "Fish that are born in freshwater, migrate to ocean, then return to freshwater to breed",
+                            "Fish that live only in freshwater",
+                            "Fish that never migrate"
+                        ],
+                        correct: 1,
+                        explanation: "Anadromous fish, like salmon, are born in freshwater, migrate to the ocean, then return to freshwater to breed. (Page 222)"
+                    }
+                ]
+            },
+            section6: {
+                title: "Invertebrates - Part 1 (Pages 224-263)",
+                questions: [
+                    {
+                        type: "multiple-choice",
+                        question: "Invertebrates make up what percentage of the animal kingdom?",
+                        options: [
+                            "75%",
+                            "85%",
+                            "95%",
+                            "99%"
+                        ],
+                        correct: 2,
+                        explanation: "Invertebrates make up 95% of the animal kingdom. (Page 226)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "What are nematocysts?",
+                        options: [
+                            "Tiny sponges",
+                            "Stinging cells of sea anemones",
+                            "Type of worm",
+                            "Coral polyps"
+                        ],
+                        correct: 1,
+                        explanation: "Nematocysts are stinging cells of sea anemones, containing venom, a barbed needle, and a trigger hair. (Page 230)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "What are the three main types of worms?",
+                        options: [
+                            "Earthworms, tapeworms, hookworms",
+                            "Flatworms, roundworms, segmented worms",
+                            "Marine worms, freshwater worms, terrestrial worms",
+                            "Parasitic worms, free-living worms, filter-feeding worms"
+                        ],
+                        correct: 1,
+                        explanation: "The three main types are flatworms, roundworms, and segmented worms. (Page 236)"
+                    },
+                    {
+                        type: "true-false",
+                        question: "Hard corals build huge coral reefs and have an external skeleton made of limestone.",
+                        correct: false,
+                        explanation: "False. Hard corals have an internal skeleton made of limestone. (Page 234)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "What percentage of all animal species are arthropods?",
+                        options: [
+                            "50%",
+                            "60%",
+                            "70%",
+                            "80%"
+                        ],
+                        correct: 3,
+                        explanation: "Arthropods make up 80% of all animal species on Earth. (Page 246)"
+                    }
+                ]
+            },
+            section7: {
+                title: "Invertebrates - Part 2 (Pages 264-291)",
+                questions: [
+                    {
+                        type: "multiple-choice",
+                        question: "How many ants may live in a single leaf-cutter ant nest?",
+                        options: [
+                            "1,000,000",
+                            "3,000,000",
+                            "5,000,000",
+                            "10,000,000"
+                        ],
+                        correct: 2,
+                        explanation: "Leaf-cutter ant nests can have more than 5,000,000 ants. (Page 267)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "What is the largest species of moth?",
+                        options: [
+                            "Luna moth",
+                            "Atlas moth",
+                            "Emperor moth",
+                            "Silk moth"
+                        ],
+                        correct: 1,
+                        explanation: "The atlas moth is the largest species of moth in the world. (Page 275)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "How many legs do scorpions have?",
+                        options: [
+                            "6 legs",
+                            "8 legs",
+                            "10 legs",
+                            "4 pairs of legs"
+                        ],
+                        correct: 3,
+                        explanation: "Scorpions have four pairs of legs (8 legs total). (Page 278)"
+                    },
+                    {
+                        type: "true-false",
+                        question: "Spider silk never decays or dries out.",
+                        correct: true,
+                        explanation: "True. Spider silk is made from protein and never decays or dries out. (Page 282-283)"
+                    },
+                    {
+                        type: "multiple-choice",
+                        question: "What is the largest native scorpion in North America?",
+                        options: [
+                            "Emperor scorpion",
+                            "Giant desert hairy scorpion",
+                            "Arizona bark scorpion",
+                            "Striped scorpion"
+                        ],
+                        correct: 1,
+                        explanation: "The giant desert hairy scorpion is the largest native scorpion in North America. (Page 279)"
+                    }
+                ]
+            }
+        };
+
+        // Global state
+        let currentSection = 'section1';
+        let currentQuestionIndex = 0;
+        let userAnswers = {};
+        let score = {};
+
+        // Initialize scores for all sections
+        Object.keys(questionBank).forEach(section => {
+            score[section] = {
+                correct: 0,
+                answered: 0
+            };
+            userAnswers[section] = {};
+        });
+
+        // Initialize sections menu
+        function initializeSections() {
+            const menu = document.getElementById('sectionMenu');
+            menu.innerHTML = '';
+            
+            Object.keys(questionBank).forEach((sectionId, index) => {
+                const section = questionBank[sectionId];
+                const li = document.createElement('li');
+                li.className = `section-item ${index === 0 ? 'active' : ''}`;
+                li.textContent = section.title;
+                li.onclick = () => switchSection(sectionId);
+                menu.appendChild(li);
+            });
+            
+            updateTotalQuestions();
+        }
+
+        function switchSection(sectionId) {
+            currentSection = sectionId;
+            currentQuestionIndex = 0;
+            
+            // Update active state in menu
+            document.querySelectorAll('.section-item').forEach((item, index) => {
+                const sectionKeys = Object.keys(questionBank);
+                if (sectionKeys[index] === sectionId) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+            
+            displayQuestion();
+            updateProgress();
+        }
+
+        function displayQuestion() {
+            const section = questionBank[currentSection];
+            if (!section || !section.questions.length) return;
+            
+            const question = section.questions[currentQuestionIndex];
+            const container = document.getElementById('questionContainer');
+            const savedAnswer = userAnswers[currentSection][currentQuestionIndex];
+            
+            let html = `
+                <div class="topic-header">
+                    <strong>${section.title}</strong>
+            `;
+            
+            if (question.type === 'matching') {
+                html += `<p style="color: #e9ecef; margin-top: 5px;">${question.question}</p>`;
+            }
+            
+            html += `</div>
+                <div class="question-card">
+                    <div class="question-text">${currentQuestionIndex + 1}. ${question.question}</div>
+            `;
+            
+            if (question.type === 'multiple-choice') {
+                html += `<div class="options-grid">`;
+                question.options.forEach((option, index) => {
+                    const isCorrect = savedAnswer !== undefined && savedAnswer === index;
+                    const isIncorrect = savedAnswer !== undefined && savedAnswer !== index && savedAnswer === question.correct;
+                    const selectedClass = savedAnswer !== undefined 
+                        ? (index === question.correct ? 'correct' : (savedAnswer === index ? 'incorrect' : ''))
+                        : '';
+                    
+                    html += `
+                        <button class="option-btn ${selectedClass}" onclick="checkAnswer(${index})" ${savedAnswer !== undefined ? 'disabled' : ''}>
+                            ${String.fromCharCode(65 + index)}. ${option}
+                        </button>
+                    `;
+                });
+                html += `</div>`;
+            } else if (question.type === 'true-false') {
+                html += `<div class="true-false-container">`;
+                [true, false].forEach((value, index) => {
+                    const isCorrect = savedAnswer !== undefined && savedAnswer === value;
+                    const isIncorrect = savedAnswer !== undefined && savedAnswer !== value && savedAnswer === question.correct;
+                    const selectedClass = savedAnswer !== undefined 
+                        ? (value === question.correct ? 'correct' : (savedAnswer === value ? 'incorrect' : ''))
+                        : '';
+                    
+                    html += `
+                        <button class="option-btn tf-btn ${selectedClass}" onclick="checkAnswer(${value})" ${savedAnswer !== undefined ? 'disabled' : ''}>
+                            ${value ? 'TRUE' : 'FALSE'}
+                        </button>
+                    `;
+                });
+                html += `</div>`;
+            } else if (question.type === 'matching') {
+                html += `<div class="matching-container">`;
+                question.pairs.forEach((pair, index) => {
+                    html += `
+                        <div class="matching-item">
+                            <span>${pair.left}</span>
+                            <select onchange="checkMatchingAnswer(${index}, this.value)">
+                                <option value="">Select match</option>
+                                ${question.pairs.map(p => `<option value="${p.right}">${p.right}</option>`).join('')}
+                            </select>
+                        </div>
+                    `;
+                });
+                html += `</div>`;
+            }
+            
+            if (savedAnswer !== undefined && question.explanation) {
+                html += `
+                    <div class="feedback show">
+                        <strong>Explanation:</strong> ${question.explanation}
+                    </div>
+                `;
+            }
+            
+            html += `</div>`;
+            
+            container.innerHTML = html;
+            updateProgress();
+        }
+
+        function checkAnswer(answer) {
+            const section = questionBank[currentSection];
+            const question = section.questions[currentQuestionIndex];
+            
+            // Save answer
+            userAnswers[currentSection][currentQuestionIndex] = answer;
+            
+            // Update score
+            if (!score[currentSection].answered) {
+                score[currentSection].answered = 0;
+            }
+            
+            // Check if this question was previously answered correctly
+            const wasCorrect = score[currentSection].correctAnswers && 
+                              score[currentSection].correctAnswers[currentQuestionIndex];
+            
+            if (!wasCorrect && answer === question.correct) {
+                score[currentSection].correct = (score[currentSection].correct || 0) + 1;
+                if (!score[currentSection].correctAnswers) {
+                    score[currentSection].correctAnswers = {};
+                }
+                score[currentSection].correctAnswers[currentQuestionIndex] = true;
+            }
+            
+            score[currentSection].answered++;
+            
+            // Display updated question with feedback
+            displayQuestion();
+            updateProgress();
+        }
+
+        function checkMatchingAnswer(index, value) {
+            // Implement matching logic if needed
+            console.log('Matching answer:', index, value);
+        }
+
+        function previousQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                displayQuestion();
+                updateProgress();
+            }
+        }
+
+        function nextQuestion() {
+            const section = questionBank[currentSection];
+            if (currentQuestionIndex < section.questions.length - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+                updateProgress();
+            }
+        }
+
+        function updateProgress() {
+            const section = questionBank[currentSection];
+            document.getElementById('questionCounter').textContent = 
+                `Question ${currentQuestionIndex + 1} of ${section.questions.length}`;
+            
+            const sectionScore = score[currentSection];
+            document.getElementById('scoreDisplay').textContent = 
+                `Score: ${sectionScore.correct || 0}/${sectionScore.answered || 0}`;
+            
+            updateTotalQuestions();
+        }
+
+        function updateTotalQuestions() {
+            const totalQuestions = Object.values(questionBank).reduce((sum, section) => 
+                sum + section.questions.length, 0
+            );
+            
+            const totalAnswered = Object.values(score).reduce((sum, s) => 
+                sum + (s.answered || 0), 0
+            );
+            
+            document.getElementById('totalQuestions').textContent = totalQuestions;
+            document.getElementById('completedCount').textContent = totalAnswered;
+        }
+
+        function resetSection() {
+            if (confirm('Are you sure you want to reset your progress in this section?')) {
+                score[currentSection] = {
+                    correct: 0,
+                    answered: 0,
+                    correctAnswers: {}
+                };
+                userAnswers[currentSection] = {};
+                currentQuestionIndex = 0;
+                displayQuestion();
+                updateProgress();
+            }
+        }
+
+        // Initialize the app
+        initializeSections();
+        displayQuestion();
+
+        // Make functions globally available
+        window.checkAnswer = checkAnswer;
+        window.checkMatchingAnswer = checkMatchingAnswer;
+        window.previousQuestion = previousQuestion;
+        window.nextQuestion = nextQuestion;
+        window.switchSection = switchSection;
+        window.resetSection = resetSection;
+    </script>
+</body>
+</html>
